@@ -46,11 +46,6 @@ public class ring : good
 		this.pic_num = pic_num;
 		this.rare = rare;
 	}
-
-	public static ring random_ring()
-	{
-		
-	}
 }
 
 public class hp_bottle : good

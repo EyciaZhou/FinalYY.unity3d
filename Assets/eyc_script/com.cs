@@ -10,7 +10,6 @@ public class com : MonoBehaviour
 	public	static	buff_manager buffs;
 	public	static	exp_handler exp;
 	public	static	camera_and_input ci;
-	public	static	rigv3 rig;
 	public	static	Transform tr;
 
 	public	static	float	c_Jmped;

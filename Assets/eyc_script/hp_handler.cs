@@ -4,30 +4,29 @@ using System.Collections.Generic;
 
 public class hp_handler : MonoBehaviour
 {
-	public delegate void TdeadCallback ();
-
-	public delegate bool Tcannot_dead_callback ();
+	public delegate void t_dead_callback ();
+	public delegate bool t_cannot_dead_callback ();
 
 	public int point = 40;
 	float recovery_point = 4;
 	float recovery_last;
 	public int max_point = 400;
-	/*
-	bool show;
-	string val;
-	Vector3 pos;*/
-
-	//public int mode = 0;
 	
-	List<TdeadCallback> deadCallback = new List<TdeadCallback> ();
-	List<Tcannot_dead_callback> cannot_dead_callback = new List<Tcannot_dead_callback> ();
+	List<t_dead_callback> dead_callback = new List<t_dead_callback> ();
+	List<t_cannot_dead_callback> cannot_dead_callback = new List<t_cannot_dead_callback> ();
+
+	view_interface view;
+
+	public void bind_view(view_interface v) {
+		this.view = v;
+	}
 
 	public float getRate ()
 	{
 		return (float)point / max_point;
 	}
 
-	public bool isDead ()
+	public bool is_dead ()
 	{
 		return point == 0;
 	}
@@ -37,12 +36,15 @@ public class hp_handler : MonoBehaviour
 		point = max_point;
 	}
 
-	public void setMaxPoint (int maxp)
+	public void set_max_point (int maxp)
 	{
 		max_point = maxp;
+		if (view != null) {
+			view.update_view ();
+		}
 	}
 
-	public void setRecovery (float recp)
+	public void set_recovery_per_second (float recp)
 	{
 		recovery_point = recp;
 	}
@@ -52,21 +54,19 @@ public class hp_handler : MonoBehaviour
 		if (point < 0) {
 			return;
 		}
-		if (isDead ()) {
+		if (is_dead ()) {
 			return;
 		}
 		this.point += point;
 		if (this.point > max_point) {
 			this.point = max_point;
 		}
+		if (view != null) {
+			view.update_view ();
+		}
 	}
 
-	public void hurt (int point)
-	{
-		hurt (point, Color.yellow, Color.red);
-	}
-
-	public void hurt (int point, Color c1, Color c2)
+	public void hurt (int point/*, Color c1, Color c2*/)
 	{
 		if (point < 0) {
 			return;
@@ -78,28 +78,32 @@ public class hp_handler : MonoBehaviour
 		GUI_Game.GUI_Add_Hurt (pos.x, Screen.height - pos.y, (-point).ToString (), c1, c2);
 		*/
 
+		if (view != null) {
+			view.update_view ();
+		}
+
 		if (this.point <= 0) {
 			this.point = 0;
-			CancelInvoke ("recovery_deamon");
-			foreach (Tcannot_dead_callback cb in cannot_dead_callback) {
+			foreach (t_cannot_dead_callback cb in cannot_dead_callback) {
 				if (cb ()) {
 					return;
 				}
 			}
-			foreach (TdeadCallback cb in deadCallback) {
+			CancelInvoke ("recovery_deamon");
+			foreach (t_dead_callback cb in dead_callback) {
 				cb ();
 			}
 		}
 	}
 
-	public void add_cannot_dead_callback (Tcannot_dead_callback callback)
+	public void add_cannot_dead_callback (t_cannot_dead_callback callback)
 	{
 		cannot_dead_callback.Add (callback);
 	}
 
-	public void addDeadCallBack (TdeadCallback callback)
+	public void addDeadCallBack (t_dead_callback callback)
 	{
-		deadCallback.Add (callback);
+		dead_callback.Add (callback);
 	}
 
 	public void reborn (int hp = -1)

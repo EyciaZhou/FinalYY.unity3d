@@ -6,10 +6,10 @@ public class mana_handler : MonoBehaviour
 {
 	public delegate void TmanaOutCallback ();
 
-	public long point = 100;
+	public int point = 100;
 	float recovery_point;
 	float recovery_last;
-	public long max_point = 400;
+	public int max_point = 400;
 
 	List<TmanaOutCallback> manaOutCallback = new List<TmanaOutCallback> ();
 
@@ -28,7 +28,7 @@ public class mana_handler : MonoBehaviour
 		point = max_point;
 	}
 
-	public void setMaxPoint (long maxp)
+	public void setMaxPoint (int maxp)
 	{
 		max_point = maxp;
 	}
@@ -38,7 +38,7 @@ public class mana_handler : MonoBehaviour
 		recovery_point = recp;
 	}
 
-	public void recovery (long point)
+	public void recovery (int point)
 	{
 		this.point += point;
 		if (this.point > max_point) {
@@ -46,7 +46,7 @@ public class mana_handler : MonoBehaviour
 		}
 	}
 
-	public bool cost (long point)
+	public bool cost (int point)
 	{
 		if (point < 0) {
 			return false;
@@ -67,7 +67,7 @@ public class mana_handler : MonoBehaviour
 		manaOutCallback.Add (callback);
 	}
 
-	public void reborn (long mp = -1)
+	public void reborn (int mp = -1)
 	{
 		CancelInvoke ("recovery_deamon");
 		InvokeRepeating ("recovery_deamon", 0, 1);
@@ -87,8 +87,8 @@ public class mana_handler : MonoBehaviour
 	void recovery_deamon ()
 	{
 		recovery_last += recovery_point;
-		recovery ((long)(recovery_last));
-		recovery_last -= (long)(recovery_last);
+		recovery ((int)recovery_last);
+		recovery_last -= (int)recovery_point;
 	}
 
 	// Use this for initialization

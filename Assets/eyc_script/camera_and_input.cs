@@ -30,8 +30,6 @@ using System.Collections;
 
 public class camera_and_input : MonoBehaviour
 {
-
-	Transform transform;
 	Camera cam;
 
 	string idleClipName = "CombatModeB";
@@ -62,7 +60,6 @@ public class camera_and_input : MonoBehaviour
 	public void init ()
 	{
 		rig = GetComponent<rigv3> ();
-		transform = GetComponent<Transform> ();
 		cam = Camera.main;
 
 		if (rig == null) {

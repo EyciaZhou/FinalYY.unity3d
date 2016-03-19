@@ -15,8 +15,12 @@ public class player : MonoBehaviour {
 
 		if (game_object != null) {
 			ci = game_object.AddComponent<camera_and_input> ();
-	
+			hp = game_object.AddComponent<hp_handler> ();
+			mp = game_object.AddComponent<mana_handler> ();
+
 			ci.init ();
+			hp.init ();
+			mp.init ();
 		}
 	}
 	

@@ -49,7 +49,7 @@ public class fire : MonoBehaviour
 	void OnTriggerEnter (Collider renwu)
 	{
 		if (renwu.gameObject.tag == "jiangshi" && !dead) {
-			renwu.GetComponent<hp_handler> ().hurt (10, Color.yellow, Color.white);
+			renwu.GetComponent<hp_handler> ().hurt (10);
 			Instantiate (boom, transform.position, transform.rotation);
 			Destroy (gameObject);
 			dead = true;
