@@ -4,5 +4,5 @@ public interface controller_interface
 {
 	attributes attr { get; set; }
 	void update_controller ();
-	System.Guid guid { get; set; }
+	System.Guid guid { get; }
 }

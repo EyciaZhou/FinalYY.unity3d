@@ -2,23 +2,47 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class mana_handler : MonoBehaviour
+public class mana_handler : MonoBehaviour, controller_interface
 {
-	public delegate void TmanaOutCallback ();
+	public delegate void t_mana_out_callback ();
 
-	public int point = 100;
-	float recovery_point;
+	List<t_mana_out_callback> mana_out_callbacks = new List<t_mana_out_callback> ();
+
+	public int point { get; private set; }
+	public float recovery_per_second { get; private set; }
+	public int max_point { get; private set; }
+
 	float recovery_last;
-	public int max_point = 400;
 
-	List<TmanaOutCallback> manaOutCallback = new List<TmanaOutCallback> ();
+	view_interface view;
 
-	public float getRate ()
-	{
-		return (float)point / max_point;
+	bool modified = false;
+
+	public attributes attr{ get; set; }
+	public System.Guid guid{ get; private set; }
+
+	public mana_handler() {
+		this.guid = System.Guid.NewGuid ();
 	}
 
-	public bool IsManaOut ()
+	public void update_controller() {
+		int lst_mx = this.max_point;
+		this.max_point = attr.max_mp;
+
+		if (this.max_point - lst_mx > 0) {
+			recovery (this.max_point - lst_mx);
+		}
+
+		this.recovery_per_second = attr.recovery_mana_per_second;
+
+		modified = true;
+	}
+
+	public void bind_view(view_interface v) {
+		this.view = v;
+	}
+
+	public bool is_mana_out ()
 	{
 		return point == 0;
 	}
@@ -26,16 +50,7 @@ public class mana_handler : MonoBehaviour
 	public void restart ()
 	{
 		point = max_point;
-	}
-
-	public void setMaxPoint (int maxp)
-	{
-		max_point = maxp;
-	}
-
-	public void setRecovery (float recp)
-	{
-		recovery_point = recp;
+		view.update_view ();
 	}
 
 	public void recovery (int point)
@@ -44,6 +59,7 @@ public class mana_handler : MonoBehaviour
 		if (this.point > max_point) {
 			this.point = max_point;
 		}
+		modified = true;
 	}
 
 	public bool cost (int point)
@@ -53,8 +69,8 @@ public class mana_handler : MonoBehaviour
 		}
 		
 		if (point > this.point) {
-			for (int i = 0; i < manaOutCallback.Count; i++) {
-				manaOutCallback [i] ();
+			foreach (t_mana_out_callback cb in mana_out_callbacks) {
+				cb ();
 			}
 			return false;
 		}
@@ -62,9 +78,12 @@ public class mana_handler : MonoBehaviour
 		return true;
 	}
 
-	public void setManaoutCallBack (TmanaOutCallback callback)
-	{
-		manaOutCallback.Add (callback);
+	public void add_mana_out_callback(t_mana_out_callback callback) {
+		mana_out_callbacks.Add (callback);
+	}
+
+	public void remove_mana_out_callback(t_mana_out_callback callback) {
+		mana_out_callbacks.Remove (callback);
 	}
 
 	public void reborn (int mp = -1)
@@ -72,7 +91,7 @@ public class mana_handler : MonoBehaviour
 		CancelInvoke ("recovery_deamon");
 		InvokeRepeating ("recovery_deamon", 0, 1);
 		if (mp == -1) {
-			point = max_point;
+			recovery (max_point);
 		} else {
 			recovery (mp);
 		}
@@ -86,21 +105,23 @@ public class mana_handler : MonoBehaviour
 
 	void recovery_deamon ()
 	{
-		recovery_last += recovery_point;
+		recovery_last += recovery_per_second;
 		recovery ((int)recovery_last);
-		recovery_last -= (int)recovery_point;
+		recovery_last -= (int)recovery_per_second;
 	}
 
 	// Use this for initialization
 	public void init ()
 	{
 		InvokeRepeating ("recovery_deamon", 0, 1);
-		//com.hp.addDeadCallBack (dead);
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-	
+		if (modified) {
+			modified = false;
+			view.update_view ();
+		}
 	}
 }

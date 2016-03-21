@@ -8,10 +8,10 @@ public class attributes : MonoBehaviour {
 
 	public int max_hp;
 	public int max_mp;
-	public int cur_hp;
-	public int cur_mp;
 	public int speed;
 
+	public float recovery_per_second;
+	public float recovery_mana_per_second;
 
 	private mid_attributes mid;
 
@@ -74,7 +74,7 @@ public class attributes : MonoBehaviour {
 
 		buff_sort_with_guid.Add (bi.guid, bi);
 		buff_sort_with_priority.Add (bi);
-		buff_sort_with_priority.Sort ();
+		buff_sort_with_priority.Sort ((buff_interface x, buff_interface y) => x.priority.CompareTo(y.priority));
 		return bi;
 	}
 
@@ -88,9 +88,6 @@ public class attributes : MonoBehaviour {
 	}
 
 	public controller_interface bind_controller(controller_interface ci) {
-		if (ci.guid == System.Guid.Empty) {
-			ci.guid = System.Guid.NewGuid ();
-		}
 		ci.attr = this;
 		controllers.Add (ci.guid, ci);
 		return ci;

@@ -38,6 +38,7 @@ public class bars : MonoBehaviour, view_interface {
 		bar_exp = GameObject.Find ("bar_exp");
 
 		com.p.hp.bind_view (this);
+		com.p.mp.bind_view (this);
 	}
 
 	void Update() {

@@ -2,28 +2,45 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class hp_handler : MonoBehaviour
+public class hp_handler : MonoBehaviour, controller_interface
 {
 	public delegate void t_dead_callback ();
 	public delegate bool t_cannot_dead_callback ();
 
-	public int point = 40;
-	float recovery_point = 4;
-	float recovery_last;
-	public int max_point = 400;
+	public int point { get; private set; }
+	public int max_point { get; private set; }
+	public float recovery_per_second { get; private set; }
+
+	private float recovery_last;
+	private bool modified = false;
 	
 	List<t_dead_callback> dead_callback = new List<t_dead_callback> ();
 	List<t_cannot_dead_callback> cannot_dead_callback = new List<t_cannot_dead_callback> ();
 
 	view_interface view;
 
-	public void bind_view(view_interface v) {
-		this.view = v;
+	public attributes attr{ get; set; }
+	public System.Guid guid { get; private set; }
+
+	public hp_handler() {
+		this.guid = System.Guid.NewGuid ();
 	}
 
-	public float getRate ()
-	{
-		return (float)point / max_point;
+	public void update_controller() {
+		int lst_mx = this.max_point;
+		this.max_point = attr.max_hp;
+
+		if (this.max_point - lst_mx > 0) {
+			recovery (this.max_point - lst_mx);
+		}
+
+		this.recovery_per_second = attr.recovery_per_second;
+
+		modified = true;
+	}
+
+	public void bind_view(view_interface v) {
+		this.view = v;
 	}
 
 	public bool is_dead ()
@@ -34,19 +51,7 @@ public class hp_handler : MonoBehaviour
 	public void restart ()
 	{
 		point = max_point;
-	}
-
-	public void set_max_point (int maxp)
-	{
-		max_point = maxp;
-		if (view != null) {
-			view.update_view ();
-		}
-	}
-
-	public void set_recovery_per_second (float recp)
-	{
-		recovery_point = recp;
+		view.update_view ();
 	}
 
 	public void recovery (int point)
@@ -61,9 +66,7 @@ public class hp_handler : MonoBehaviour
 		if (this.point > max_point) {
 			this.point = max_point;
 		}
-		if (view != null) {
-			view.update_view ();
-		}
+		modified = true;
 	}
 
 	public void hurt (int point/*, Color c1, Color c2*/)
@@ -78,9 +81,7 @@ public class hp_handler : MonoBehaviour
 		GUI_Game.GUI_Add_Hurt (pos.x, Screen.height - pos.y, (-point).ToString (), c1, c2);
 		*/
 
-		if (view != null) {
-			view.update_view ();
-		}
+		modified = true;
 
 		if (this.point <= 0) {
 			this.point = 0;
@@ -101,7 +102,7 @@ public class hp_handler : MonoBehaviour
 		cannot_dead_callback.Add (callback);
 	}
 
-	public void addDeadCallBack (t_dead_callback callback)
+	public void add_dead_callback (t_dead_callback callback)
 	{
 		dead_callback.Add (callback);
 	}
@@ -111,7 +112,7 @@ public class hp_handler : MonoBehaviour
 		CancelInvoke ("recovery_deamon");
 		InvokeRepeating ("recovery_deamon", 0, 1);
 		if (hp == -1) {
-			point = max_point;
+			recovery (max_point);
 		} else {
 			recovery (hp);
 		}
@@ -119,7 +120,7 @@ public class hp_handler : MonoBehaviour
 
 	void recovery_deamon ()
 	{
-		recovery_last += recovery_point;
+		recovery_last += recovery_per_second;
 		recovery ((int)(recovery_last));
 		recovery_last -= (int)(recovery_last);
 	}
@@ -129,9 +130,15 @@ public class hp_handler : MonoBehaviour
 	{
 		InvokeRepeating ("recovery_deamon", 0, 1);
 	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
+
+	void LastUpdate() {
+		if (point == 0) {
+			hurt (0);
+		}
+
+		if (modified) {
+			modified = false;
+			view.update_view ();
+		}
 	}
 }
