@@ -51,7 +51,7 @@ public class hp_handler : MonoBehaviour, controller_interface
 	public void restart ()
 	{
 		point = max_point;
-		view.update_view ();
+		modified = true;
 	}
 
 	public void recovery (int point)
@@ -131,7 +131,7 @@ public class hp_handler : MonoBehaviour, controller_interface
 		InvokeRepeating ("recovery_deamon", 0, 1);
 	}
 
-	void LastUpdate() {
+	void LateUpdate() {
 		if (point == 0) {
 			hurt (0);
 		}

@@ -135,7 +135,7 @@ public class buff_manager : MonoBehaviour
 			}
 		}
 		com.b = bs;
-		com.calu_buff_c ();
+		//com.calu_buff_c ();
 	}
 
 	void FixedUpdate ()

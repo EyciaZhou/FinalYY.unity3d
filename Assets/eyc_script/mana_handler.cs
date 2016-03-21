@@ -50,7 +50,7 @@ public class mana_handler : MonoBehaviour, controller_interface
 	public void restart ()
 	{
 		point = max_point;
-		view.update_view ();
+		modified = true;
 	}
 
 	public void recovery (int point)
@@ -75,6 +75,7 @@ public class mana_handler : MonoBehaviour, controller_interface
 			return false;
 		}
 		this.point -= point;
+		modified = true;
 		return true;
 	}
 

@@ -7,7 +7,7 @@ public class com : MonoBehaviour
 
 	public	static	wave_controler	monster;
 	public	static	thing_control things;
-	public	static	buff_manager buffs;
+//	public	static	buff_manager buffs;
 	public	static	exp_handler exp;
 	public	static	camera_and_input ci;
 	public	static	Transform tr;
@@ -22,21 +22,6 @@ public class com : MonoBehaviour
 
 	public static void set_player(player pl) {
 		com.p = pl;
-	}
-
-	public static void cal_buff_and_calu ()
-	{
-		buffs.cal_buff ();
-		calu_buff_c ();
-	}
-
-	public static void calu_buff_c ()
-	{
-		//TODO
-		c_Spd = 20 + b.footstep_spd * 3;
-
-		int exp_limit = b.lv * b.lv * 10;
-		exp.limit = exp_limit;
 	}
 
 	public static void reborn ()
@@ -71,7 +56,7 @@ public class com : MonoBehaviour
 
 	public static void API_GainExp (int ex)
 	{
-		exp.gainExp (ex);
+		p.exp.gain_exp (ex);
 	}
 
 	public static void API_Drop_Coin (Vector3 pos, int coin)

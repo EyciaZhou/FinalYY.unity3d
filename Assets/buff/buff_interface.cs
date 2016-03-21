@@ -7,5 +7,5 @@ public interface buff_interface {
 	int priority { get; set; }
 	bool vaild { get; }
 	attributes attr { get; set; }
-	System.Guid guid { get; set; }
+	System.Guid guid { get; }
 }

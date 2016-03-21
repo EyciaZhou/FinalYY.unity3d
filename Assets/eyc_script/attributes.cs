@@ -8,10 +8,13 @@ public class attributes : MonoBehaviour {
 
 	public int max_hp;
 	public int max_mp;
-	public int speed;
+	public float speed;
 
 	public float recovery_per_second;
 	public float recovery_mana_per_second;
+
+	public float exp_mutiply;
+	public int exp_extra;
 
 	private mid_attributes mid;
 
@@ -20,8 +23,12 @@ public class attributes : MonoBehaviour {
 		public int agility;
 		public int intelligence;
 
+		public float speed_base;
 		public int speed_extra;
-		public int speed_mutiply;
+		public float speed_mutiply;
+
+		public float exp_mutiply;
+		public int exp_extra;
 	}
 
 	public Dictionary<string, Object> attr_dic = new Dictionary<string, Object> ();
@@ -65,10 +72,6 @@ public class attributes : MonoBehaviour {
 	}
 
 	public buff_interface add_buff(buff_interface bi) {
-		if (bi.guid == System.Guid.Empty) {
-			bi.guid = System.Guid.NewGuid ();
-		}
-
 		bi.attr = this;
 		bi.change_callback = on_buff_change;
 

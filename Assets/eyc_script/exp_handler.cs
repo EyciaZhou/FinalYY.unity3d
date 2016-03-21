@@ -2,117 +2,119 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class exp_handler : MonoBehaviour
+public class exp_handler : MonoBehaviour , controller_interface, buff_interface
 {
-	public delegate void TLvUpCallback ();
+	public delegate void t_lv_up_callback ();
 
-	public delegate long TExpCalu (long lv);
+	public float current { get; private set; }
+	public long limit { get; private set; }
+	public int lv { get; private set; }
 
-	public int limit;
-	public int current;
-	public int lv;
-	
-	Dictionary<string, TLvUpCallback> callback = new Dictionary<string, TLvUpCallback> ();
-	//TExpCalu ExpCalu;
-	/*
-	float doub_timer = 0;
-	float doub_rate = 1.0f;
-	bool doub;
-*/
-	public void clear ()
+	List<t_lv_up_callback> callbacks = new List<t_lv_up_callback> ();
+
+	public attributes attr{ get; set; }
+	private view_interface view;
+
+	private bool modified = false;
+
+	public void calculate (attributes.mid_attributes mid)
 	{
-		//doub = false;
-		lv = 1;
-		current = 0;
-		//limit = ExpCalu (lv);
+		//TODO:
+		mid.intelligence += 10 * lv;
+		mid.agility += 10 * lv;
+		mid.strength += 10 * lv;
 	}
 
-	public float getRate ()
+	public void bind_view (view_interface v)
 	{
-		return (float)current / limit;
+		this.view = v;
+	}
+
+	public attributes.t_buff_change_callback change_callback { get; set; }
+	public int priority { get; set; }
+
+	public bool vaild {
+		get {
+			return !com.p.hp.is_dead ();
+		}
+	}
+
+	public void update_controller ()
+	{
+		//pass
+	}
+
+	public System.Guid guid { get; private set; }
+
+	public exp_handler() {
+		this.guid = System.Guid.NewGuid ();
+		clear ();
+		priority = 0; //TODO:
+	}
+
+	private long exp_calu(int lv) {
+		return 10 * lv * lv; //TODO:
+	}
+
+	public void clear ()
+	{
+		lv = 1;
+		current = 0;
+		limit = exp_calu (lv);
 	}
 
 	void Update ()
-	{/*
-		if (doub) {
-			doub_timer -= Time.deltaTime;
-			if (doub_timer < 0) {
-				doub = false;
-			}
-		}*/
-		//print("limit : " + limit + " current : " + current + " lv : " + lv);
-	}
-	/*
-	public void set_double_exp (float rate, int time)
 	{
-		doub = true;
-		doub_rate = rate;
-		doub_timer = time;
+	
 	}
-	*/
-	/*
-	public void set_Lv (long lv)
-	{
-		this.lv = lv;
-		com.calu_buff_c ();
-		//limit = ExpCalu (this.lv);
-	}*/
 
 	public void init ()
 	{
 		clear ();
-		com.buffs.add_buff (new t.buff ("lv", lv_buff));
-	}
-
-	void lv_buff (t.buff_set b)
-	{
-		b.lv = lv;
 	}
 
 	void _lvup ()
 	{
-		lv++;/*
-		com.b.lv = lv;
-		com.calu_buff_c ();*/
-		//limit = ExpCalu (lv);
-		com.cal_buff_and_calu ();
-		//com.calu_buff_c ();
-		foreach (KeyValuePair<string, TLvUpCallback> cb in callback) {
-			cb.Value ();
+		lv++;
+
+		limit = exp_calu (lv);
+		foreach (t_lv_up_callback cb in callbacks) {
+			cb ();
 		}
 	}
 
-	public void LvUp (long Lv)
+	public void lv_up (long mach)
 	{
-		for (int i = 0; i < lv; i++) {
+		for (int i = 0; i < mach; i++) {
 			_lvup ();
 		}
+		modified = true;
 	}
 
-	public void gainExp (int exp)
+	public void gain_exp (int exp)
 	{
-		current += exp;
+		current += exp * attr.exp_mutiply + attr.exp_extra;
 		while (current >= limit) {
 			current -= limit;
 			_lvup ();
-			//print (exp);
+		}
+		modified = true;
+	}
+
+	public void add_lv_up_callback (t_lv_up_callback cb)
+	{
+		callbacks.Add(cb);
+	}
+
+	public void remove_lv_up_callback (t_lv_up_callback cb)
+	{
+		callbacks.Remove (cb);
+	}
+
+	void LateUpdate() {
+		if (modified) {
+			modified = false;
+			view.update_view ();
 		}
 	}
-
-	public string add_LvUpCallback (TLvUpCallback cb)
-	{
-		string id = System.Guid.NewGuid ().ToString ();
-		callback [id] = cb;
-		return id;
-	}
-
-	public void remove_LvUpCallback (string id)
-	{
-		callback.Remove (id);
-	}
-	/*
-	public void set_ExpCalu (TExpCalu ec)
-	{
-		ExpCalu = ec;
-	}*/
 }

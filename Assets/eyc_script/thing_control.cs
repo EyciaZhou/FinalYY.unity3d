@@ -124,8 +124,8 @@ public class thing_control : MonoBehaviour
 			foreach (t.buff buff in rings[id].buffs) {
 				temp.Add (buff, -1);
 			}
-			string uuid = com.buffs.add_buff (temp);
-			used_rings.Add (id, uuid);
+//			string uuid = com.buffs.add_buff (temp);
+//			used_rings.Add (id, uuid);
 		}
 	}
 
@@ -133,7 +133,7 @@ public class thing_control : MonoBehaviour
 	{
 		if (rings [id]._using) {
 			rings [id]._using = false;
-			com.buffs.remove_buff (used_rings [id]);
+//			com.buffs.remove_buff (used_rings [id]);
 			used_rings.Remove (id);
 		}
 	}
