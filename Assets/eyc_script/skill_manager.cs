@@ -169,17 +169,16 @@ public class skill_manager : MonoBehaviour
 			timers.Add (j_normal_hit, new coldDownTimer (2.0f));
 		}
 		if (timers [j_normal_hit].set_target_and_start (2.0f)) { //com.normal_hit.colddown
-			print (com.exp.lv);
-			GameObject[] gas = new GameObject[com.exp.lv];
-			for (int i = 0; i < com.exp.lv; i++) {
-				gas [i] = (GameObject)Instantiate (fireball, bar_transform.position, Quaternion.Euler (new Vector3 (0, transform.eulerAngles.y, i * (360.0f / (com.exp.lv)))));
-				gas [i].transform.parent = bar_transform;
-			}
-			qianyao.add (j_normal_hit, delegate() {
-				foreach (GameObject go in gas) {
-					go.GetComponent<fire> ().biu ();
-				}
-			}, 0.5f);
+			//GameObject[] gas = new GameObject[com.exp.lv];
+			//for (int i = 0; i < com.exp.lv; i++) {
+			//	gas [i] = (GameObject)Instantiate (fireball, bar_transform.position, Quaternion.Euler (new Vector3 (0, transform.eulerAngles.y, i * (360.0f / (com.exp.lv)))));
+			//	gas [i].transform.parent = bar_transform;
+			//}
+//			qianyao.add (j_normal_hit, delegate() {
+//				foreach (GameObject go in gas) {
+//					go.GetComponent<fire> ().biu ();
+//				}
+//			}, 0.5f);
 			GetComponent<Animation>().Stop (shot_animation);
 			GetComponent<Animation>() [shot_animation].AddMixingTransform (hand_transform, true);
 			GetComponent<Animation>().CrossFade (shot_animation);

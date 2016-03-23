@@ -37,6 +37,10 @@ public class hp_handler : MonoBehaviour, controller_interface
 		this.recovery_per_second = attr.recovery_per_second;
 
 		modified = true;
+
+
+		Debug.Log ("hp update_controller");
+
 	}
 
 	public void bind_view(view_interface v) {
@@ -67,6 +71,9 @@ public class hp_handler : MonoBehaviour, controller_interface
 			this.point = max_point;
 		}
 		modified = true;
+
+		Debug.Log ("hp recovery");
+
 	}
 
 	public void hurt (int point/*, Color c1, Color c2*/)
@@ -137,6 +144,8 @@ public class hp_handler : MonoBehaviour, controller_interface
 		}
 
 		if (modified) {
+			//Debug.Log ("hp");
+
 			modified = false;
 			view.update_view ();
 		}

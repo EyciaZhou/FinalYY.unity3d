@@ -8,7 +8,7 @@ public class com : MonoBehaviour
 	public	static	wave_controler	monster;
 	public	static	thing_control things;
 //	public	static	buff_manager buffs;
-	public	static	exp_handler exp;
+//	public	static	exp_handler exp;
 	public	static	camera_and_input ci;
 	public	static	Transform tr;
 
