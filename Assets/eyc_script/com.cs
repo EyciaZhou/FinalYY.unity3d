@@ -9,7 +9,9 @@ public class com : MonoBehaviour
 	public	static	thing_control things;
 //	public	static	buff_manager buffs;
 //	public	static	exp_handler exp;
+	public	static	hourglass_manager ts;
 	public	static	camera_and_input ci;
+	public	static	fire_view fires;
 	public	static	Transform tr;
 
 	public	static	float	c_Jmped;
@@ -32,6 +34,9 @@ public class com : MonoBehaviour
 
 	void Start ()
 	{
+		ts = gameObject.AddComponent<hourglass_manager> ();
+		fires = gameObject.AddComponent<fire_view> ();
+
 		/*monster = GetComponent<wave_controler> ();
 		things = GetComponent<thing_control> ();
 		buffs = GetComponent<buff_manager> ();

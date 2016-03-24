@@ -36,6 +36,7 @@ public class camera_and_input : MonoBehaviour
 	string runClipName = "Run";
 	string jumpClipName = "JumoRun";
 	string movingJoystickName = "MovingJoystick";
+	string AttackJoystickName = "AttackJoystick";
 
 	//camera
 	//ScrollWheel
@@ -102,11 +103,14 @@ public class camera_and_input : MonoBehaviour
 					GetComponent<Animation>().CrossFade (runClipName);
 				else
 					GetComponent<Animation>().CrossFade (jumpClipName);
-				Vector2.Angle (Vector2.zero, move.joystickAxis);
 
 				rig.e_rotate_to (new Vector3 (0, 90 - f.vector2_to_angle_deg (move.joystickAxis), 0));
 				rig.e_move_local (Vector3.forward * com.c_Spd * Time.deltaTime * move.joystickValue.magnitude);
 			}
+		}
+
+		if (move.joystickName == AttackJoystickName) {
+			com.fires.new_fire_ball_default ();
 		}
 	}
 
