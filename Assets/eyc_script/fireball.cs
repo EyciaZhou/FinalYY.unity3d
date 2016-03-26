@@ -44,7 +44,8 @@ public class fireball : MonoBehaviour {
 		float alive_time_after_loose, GameObject target, Vector3 default_postion, float speed) {
 
 		fireball fb = new_fireball (go_to_instantiate, default_scale, alive_time_after_loose, speed, default_postion);
-		fb.losse(target);
+		fb.target = target;
+		fb.losse();
 
 		return fb;
 	}
@@ -54,14 +55,16 @@ public class fireball : MonoBehaviour {
 		float time_to_loose) {
 
 		fireball fb = new_fireball (go_to_instantiate, default_scale, alive_time_after_loose, speed, default_postion);
-		com.ts.add_hourglass(time_to_loose, () => fb.losse(target));
+		fb.target = target;
+		com.ts.add_hourglass(time_to_loose, () => {
+			fb.losse();
+		});
 
 		return fb;
 	}
 
-	public void losse(GameObject target) {
+	public void losse() {
 		this.status = fire_status.losse;
-		this.target = target;
 		go.transform.parent = null;
 
 		com.ts.add_hourglass (alive_time_after_losse, () => {
@@ -75,7 +78,14 @@ public class fireball : MonoBehaviour {
 		case fire_status.losse:
 			if (go != null) {
 				if (target != null) {
-					go.transform.LookAt (target.transform.position);
+					Vector3 dist = target.transform.position - transform.position;
+
+					go.transform.rotation = Quaternion.Slerp (
+						go.transform.rotation, 
+						Quaternion.LookRotation (dist),
+						Time.deltaTime * Mathf.Max (4.5f, 30 / dist.magnitude));
+
+					//go.transform.LookAt (target.transform.position);
 				}
 				go.transform.Translate (Vector3.forward * speed * Time.deltaTime);
 			}

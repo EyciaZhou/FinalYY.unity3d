@@ -10,7 +10,9 @@ public class player : MonoBehaviour {
 	public mana_handler mp;
 	public exp_handler exp;
 
-	public attributes attr;
+	public fire_ring fr;
+
+	public attributes_manager attr;
 
 	// Use this for initialization
 	void Start () {
@@ -21,7 +23,7 @@ public class player : MonoBehaviour {
 			hp = game_object.AddComponent<hp_handler> ();
 			mp = game_object.AddComponent<mana_handler> ();
 			exp = game_object.AddComponent<exp_handler> ();
-			attr = game_object.AddComponent<attributes> ();
+			attr = game_object.AddComponent<attributes_manager> ();
 
 			attr.bind_controller (hp);
 			attr.bind_controller (mp);

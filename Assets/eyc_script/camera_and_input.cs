@@ -110,7 +110,8 @@ public class camera_and_input : MonoBehaviour
 		}
 
 		if (move.joystickName == AttackJoystickName) {
-			com.fires.new_fire_ball_default ();
+			com.fires.new_fire_ball_default ().target = GameObject.Find ("target");
+			Debug.Log (GameObject.Find ("target").name);
 		}
 	}
 

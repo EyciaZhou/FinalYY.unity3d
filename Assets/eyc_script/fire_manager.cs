@@ -3,20 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 
-public class fire_view : MonoBehaviour {
+public class fire_manager : MonoBehaviour {
 	private static GameObject fire_ball_prefab;
 
-	private Dictionary<System.Guid, fireball> fireballs = new Dictionary<System.Guid, fireball>();
+	public Dictionary<System.Guid, fireball> fireballs { get; private set; }
+
+	public fire_manager() {
+		this.fireballs = new Dictionary<System.Guid, fireball> ();
+	}
 
 	void Start() {
-		fire_ball_prefab = AssetDatabase.LoadAssetAtPath<GameObject> ("Assets/fireball/normal_hit.prefab");
+		fire_ball_prefab = AssetDatabase.LoadAssetAtPath<GameObject> (
+			"Assets/fireball/normal_hit.prefab");
 	}
 
 	public fireball new_fire_ball_default() {
 		fireball fb = fireball.new_fireball(
 			fire_ball_prefab,
 			Vector3.one,
-			20,
+			10000,
 			null,
 			com.p.transform.position,
 			10,

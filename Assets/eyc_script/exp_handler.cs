@@ -12,12 +12,12 @@ public class exp_handler : MonoBehaviour , controller_interface, buff_interface
 
 	List<t_lv_up_callback> callbacks = new List<t_lv_up_callback> ();
 
-	public attributes attr{ get; set; }
+	public attributes_manager am{ get; set; }
 	private view_interface view;
 
 	private bool modified = false;
 
-	public void calculate (attributes.mid_attributes mid)
+	public void calculate (attributes_manager.t_mid_attributes mid)
 	{
 		//TODO:
 		mid.intelligence += 10 * lv;
@@ -30,7 +30,7 @@ public class exp_handler : MonoBehaviour , controller_interface, buff_interface
 		this.view = v;
 	}
 
-	public attributes.t_buff_change_callback change_callback { get; set; }
+	public attributes_manager.t_buff_change_callback change_callback { get; set; }
 	public int priority { get; set; }
 
 	public bool vaild {
@@ -93,7 +93,7 @@ public class exp_handler : MonoBehaviour , controller_interface, buff_interface
 
 	public void gain_exp (int exp)
 	{
-		current += exp * attr.exp_mutiply + attr.exp_extra;
+		current += exp * am.attr.exp_mutiply + am.attr.exp_extra;
 		while (current >= limit) {
 			current -= limit;
 			_lvup ();

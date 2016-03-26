@@ -8,7 +8,7 @@ public class hourglass_manager : MonoBehaviour {
 	public delegate void callback();
 
 	public class hourglass {
-		float target;
+		public float target { get; private set; }
 		callback cb;
 		bool _pause = false;
 
@@ -36,9 +36,9 @@ public class hourglass_manager : MonoBehaviour {
 
 	public class dot
 	{
-		float target;
-		float duration;
-		float reach;
+		public float target { get; private set; }
+		public float duration { get; private set; }
+		public float reach { get; private set; }
 		callback cb_each;
 		callback when_end;
 		bool _pause = false;
@@ -68,8 +68,8 @@ public class hourglass_manager : MonoBehaviour {
 		}
 	}
 
-	private Dictionary<System.Guid, hourglass> hourglasses { get; set; }
-	private Dictionary<System.Guid, dot> dots { get; set; }
+	public Dictionary<System.Guid, hourglass> hourglasses { get; private set; }
+	public Dictionary<System.Guid, dot> dots { get; private set; }
 
 	public hourglass_manager() {
 		this.hourglasses = new Dictionary<System.Guid, hourglass> ();
@@ -79,10 +79,13 @@ public class hourglass_manager : MonoBehaviour {
 	void Update () {
 		List<System.Guid> lst_remove = new List<System.Guid> ();
 
-		foreach (KeyValuePair<System.Guid, hourglass> kp in hourglasses) {
-			if (kp.Value == null || !kp.Value.update_time_and_rise_if_necessary ()) {
+		System.Guid[] keys = new System.Guid[hourglasses.Count];
+		hourglasses.Keys.CopyTo (keys, 0);
+
+		foreach (System.Guid k in keys) {
+			if (hourglasses[k] == null || hourglasses[k].update_time_and_rise_if_necessary ()) {
 				//hourglasses [kp.Key] = null;
-				lst_remove.Add (kp.Key);
+				lst_remove.Add (k);
 			}
 		}
 
@@ -90,15 +93,19 @@ public class hourglass_manager : MonoBehaviour {
 			hourglasses.Remove (id);
 		}
 
+		if (lst_remove.Count > 0) {
+			Debug.Log (lst_remove.Count + "");
+		}
+
 		lst_remove.Clear ();
 
 		foreach (KeyValuePair<System.Guid, dot> kp in dots) {
-			if (kp.Value == null || !kp.Value.update_time_and_rise_if_necessary ()) {
-				dots [kp.Key] = null;
+			if (kp.Value == null || kp.Value.update_time_and_rise_if_necessary ()) {
+				//dots [kp.Key] = null;
 				lst_remove.Add (kp.Key);
 			}
 		}
-
+			
 		foreach (System.Guid id in lst_remove) {
 			dots.Remove (id);
 		}
@@ -112,8 +119,13 @@ public class hourglass_manager : MonoBehaviour {
 	}
 
 	public System.Guid add_hourglass(float total_time, callback cb) {
+		//Debug.Log ("add hourglass");
+
 		System.Guid id = System.Guid.NewGuid ();
 		hourglasses.Add(id, new hourglass(total_time, cb));
+
+		//Debug.Log (hourglasses.Count + "");
+		//Debug.Log (id + "");
 		return id;
 	}
 

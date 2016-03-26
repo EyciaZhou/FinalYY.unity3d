@@ -18,7 +18,7 @@ public class mana_handler : MonoBehaviour, controller_interface
 
 	bool modified = false;
 
-	public attributes attr{ get; set; }
+	public attributes_manager am{ get; set; }
 	public System.Guid guid{ get; private set; }
 
 	public mana_handler() {
@@ -27,13 +27,13 @@ public class mana_handler : MonoBehaviour, controller_interface
 
 	public void update_controller() {
 		int lst_mx = this.max_point;
-		this.max_point = attr.max_mp;
+		this.max_point = am.attr.max_mp;
 
 		if (this.max_point - lst_mx > 0) {
 			recovery (this.max_point - lst_mx);
 		}
 
-		this.recovery_per_second = attr.recovery_mana_per_second;
+		this.recovery_per_second = am.attr.recovery_mana_per_second;
 
 		modified = true;
 	}

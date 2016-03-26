@@ -2,7 +2,7 @@
 
 public interface controller_interface
 {
-	attributes attr { get; set; }
+	attributes_manager am { get; set; }
 	void update_controller ();
 	void bind_view(view_interface v);
 	System.Guid guid { get; }
