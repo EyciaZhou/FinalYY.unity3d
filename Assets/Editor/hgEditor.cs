@@ -30,7 +30,7 @@ public class hgEditor : Editor {
 			EditorGUILayout.LabelField ("cnt", hgm.dots.Count + "");
 
 			foreach (KeyValuePair<System.Guid, hourglass_manager.dot> kp in hgm.dots) {
-				EditorGUILayout.LabelField (kp.Key + "", kp.Value.target + "");
+				EditorGUILayout.LabelField (kp.Key + "", kp.Value.reach_total + "/" + kp.Value.target);
 			}
 
 		}

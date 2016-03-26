@@ -15,9 +15,12 @@ public class fireball : MonoBehaviour {
 	public fire_status status { get; private set; }
 	public System.Guid uuid { get; private set; }
 	public GameObject target { get; set; }
+
+	private Vector3 _size;
 	public Vector3 size {
-		get { return this.size; }
+		get { return _size; }
 		set {
+			_size = value;
 			if (go != null) {
 				go.transform.localScale = value;
 			}

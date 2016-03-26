@@ -83,7 +83,11 @@ public class attributes_manager : MonoBehaviour {
 	//private Dictionary<System.Guid, buff_interface> buff_sort_with_guid = new Dictionary<System.Guid, buff_interface>();
 	private List<buff_interface> buff_sort_with_priority = new List<buff_interface>();
 
-	private bool buff_changed;
+	private bool changed;
+
+	public attributes_manager() {
+		re_calculate ();
+	}
 
 	//---------------------calc progress------------------
 
@@ -129,6 +133,7 @@ public class attributes_manager : MonoBehaviour {
 		//buff_sort_with_guid.Add (bi.guid, bi);
 		buff_sort_with_priority.Add (bi);
 		buff_sort_with_priority.Sort ((buff_interface x, buff_interface y) => x.priority.CompareTo(y.priority));
+		changed = true;
 		return bi;
 	}
 
@@ -136,6 +141,7 @@ public class attributes_manager : MonoBehaviour {
 		if (controllers.ContainsKey(bi.guid)) {
 			buff_sort_with_priority.Remove (bi);
 			//buff_sort_with_guid.Remove (bi.guid);
+			changed = true;
 			return true;
 		}
 		return false;
@@ -147,12 +153,14 @@ public class attributes_manager : MonoBehaviour {
 	public controller_interface bind_controller(controller_interface ci) {
 		ci.am = this;
 		controllers.Add (ci.guid, ci);
+		changed = true;
 		return ci;
 	}
 
 	public bool remove_controller(controller_interface ci) {
 		if (controllers.ContainsKey (ci.guid)) {
 			controllers.Remove (ci.guid);
+			changed = true;
 			return true;
 		}
 		return false;
@@ -166,6 +174,7 @@ public class attributes_manager : MonoBehaviour {
 		attr_calc.Add (id, ac);
 		attr_calc_name.Add (id, name);
 
+		re_calculate ();
 		return id;
 	}
 
@@ -175,20 +184,21 @@ public class attributes_manager : MonoBehaviour {
 			attr_calc_name.Remove (to_remove);
 			return true;
 		}
+		changed = true;
 		return false;
 	}
 		
 	//-----------------------etc---------------------------
 
 	private void on_buff_change() {
-		buff_changed = true;
+		changed = true;
 	}
 	
 	// Update is called once per frame
 	void LateUpdate () {
-		if (buff_changed) {
+		if (changed) {
 			re_calculate ();
-			buff_changed = false;
+			changed = false;
 		}
 	}
 }

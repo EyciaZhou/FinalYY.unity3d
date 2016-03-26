@@ -9,12 +9,15 @@ public class hourglass_manager : MonoBehaviour {
 
 	public class hourglass {
 		public float target { get; private set; }
+		public System.Guid guid { get; private set; }
+
 		callback cb;
 		bool _pause = false;
 
 		public hourglass(float target, callback cb) {
 			this.target = target;
 			this.cb = cb;
+			this.guid = System.Guid.NewGuid();
 		}
 
 		public bool update_time_and_rise_if_necessary() {
@@ -37,34 +40,43 @@ public class hourglass_manager : MonoBehaviour {
 	public class dot
 	{
 		public float target { get; private set; }
+		public float reach_total { get; private set; }
 		public float duration { get; private set; }
 		public float reach { get; private set; }
+		public System.Guid guid { get; private set; }
 		callback cb_each;
 		callback when_end;
 		bool _pause = false;
 
 		public dot(float target, float duration, callback cb_each, callback when_end) {
 			this.target = target;
+			this.reach_total = 0;
 			this.reach = 0;
 			this.duration = duration;
 			this.cb_each = cb_each;
 			this.when_end = when_end;
+			this.guid = System.Guid.NewGuid();
 		}
 
 		public bool update_time_and_rise_if_necessary() {
 			if (_pause)
 				return false;
 			reach += Time.deltaTime;
-			target -= Time.deltaTime;
+			reach_total += Time.deltaTime;
 			if (reach >= duration) {
 				reach -= duration;
 				cb_each ();
 			}
-			if (target <= 0) {
+			if (reach_total >= target) {
+				pause ();
 				when_end ();
 				return true;
 			}
 			return false;
+		}
+
+		public void pause() {
+			_pause = true;
 		}
 	}
 
@@ -111,41 +123,43 @@ public class hourglass_manager : MonoBehaviour {
 		}
 	}
 
-	public void cancle_hourglass(System.Guid id) {
-		if (hourglasses.ContainsKey (id)) {
-			hourglasses [id].pause ();
-			hourglasses.Remove (id);
+	public void cancle_hourglass(hourglass hg) {
+		if (hourglasses.ContainsKey (hg.guid)) {
+			hourglasses [hg.guid].pause ();
+			hourglasses.Remove (hg.guid);
 		}
 	}
 
-	public System.Guid add_hourglass(float total_time, callback cb) {
-		//Debug.Log ("add hourglass");
-
-		System.Guid id = System.Guid.NewGuid ();
-		hourglasses.Add(id, new hourglass(total_time, cb));
-
-		//Debug.Log (hourglasses.Count + "");
-		//Debug.Log (id + "");
-		return id;
+	public hourglass add_hourglass(float total_time, callback cb) {
+		hourglass hg = new hourglass (total_time, cb);
+		hourglasses.Add(hg.guid, hg);
+		return hg;
 	}
 
-	public System.Guid add_dot_start_now(float total_time, float duration, callback cb_each, callback when_end) { 
+	public void cancle_dot(dot d) {
+		if (dots.ContainsKey(d.guid)) {
+			dots[d.guid].pause();
+			dots.Remove(d.guid);
+		}
+	}
+
+	public dot add_dot_start_now(float total_time, float duration, callback cb_each, callback when_end) { 
 		cb_each ();
 		return add_dot (total_time, duration, cb_each, when_end);
 	}
 
-	public System.Guid add_dot_start_now(int total_times, float duration, callback cb_each, callback when_end) {
+	public dot add_dot_start_now(int total_times, float duration, callback cb_each, callback when_end) {
 		cb_each ();
 		return add_dot (total_times, duration, cb_each, when_end);
 	}
 
-	public System.Guid add_dot(float total_time, float duration, callback cb_each, callback when_end) { 
-		System.Guid id = System.Guid.NewGuid ();
-		dots.Add(id, new dot(total_time, duration, cb_each, when_end));
-		return id;
+	public dot add_dot(float total_time, float duration, callback cb_each, callback when_end) { 
+		dot d = new dot (total_time, duration, cb_each, when_end);
+		dots.Add(d.guid, d);
+		return d;
 	}
 
-	public System.Guid add_dot(int total_times, float duration, callback cb_each, callback when_end) {
+	public dot add_dot(int total_times, float duration, callback cb_each, callback when_end) {
 		return add_dot (total_times * duration + eps, duration, cb_each, when_end);
 	}
 }

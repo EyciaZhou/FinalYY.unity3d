@@ -21,11 +21,9 @@ public class fire_manager : MonoBehaviour {
 		fireball fb = fireball.new_fireball(
 			fire_ball_prefab,
 			Vector3.one,
-			10000,
-			null,
-			com.p.transform.position,
 			10,
-			3
+			10,
+			com.p.transform.position
 		);
 
 		fireballs.Add (fb.uuid, fb);
