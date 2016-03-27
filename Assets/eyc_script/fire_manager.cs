@@ -20,7 +20,7 @@ public class fire_manager : MonoBehaviour {
 	public fireball new_fire_ball_default() {
 		fireball fb = fireball.new_fireball(
 			fire_ball_prefab,
-			Vector3.one,
+			1,
 			10,
 			10,
 			com.p.transform.position

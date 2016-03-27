@@ -72,8 +72,6 @@ public class hp_handler : MonoBehaviour, controller_interface
 		}
 		modified = true;
 
-		Debug.Log ("hp recovery");
-
 	}
 
 	public void hurt (int point/*, Color c1, Color c2*/)
@@ -135,6 +133,7 @@ public class hp_handler : MonoBehaviour, controller_interface
 	// Use this for initialization
 	public void init ()
 	{
+		this.point = 1;
 		InvokeRepeating ("recovery_deamon", 0, 1);
 	}
 

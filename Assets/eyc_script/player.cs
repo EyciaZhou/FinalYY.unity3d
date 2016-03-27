@@ -37,6 +37,15 @@ public class player : MonoBehaviour {
 		hp.init ();
 		mp.init ();
 		exp.init ();
+
+		am.add_attr_calc ((mid, attr) => { //TODO: 
+			attr.max_hp = mid.strength * 20;
+			attr.recovery_per_second = mid.strength * 0.1f;
+
+			attr.max_mp = mid.intelligence * 20;
+			attr.recovery_mana_per_second = mid.intelligence * 0.1f;
+
+		}, "hp&mp");
 	}
 	
 	// Update is called once per frame

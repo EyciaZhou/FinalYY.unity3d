@@ -58,7 +58,7 @@ public class exp_handler : MonoBehaviour , controller_interface, buff_interface
 
 	public void clear ()
 	{
-		lv = 1;
+		lv = 3;
 		current = 0;
 		limit = exp_calu (lv);
 	}
