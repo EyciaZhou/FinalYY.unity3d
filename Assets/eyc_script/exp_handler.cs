@@ -23,6 +23,9 @@ public class exp_handler : MonoBehaviour , controller_interface, buff_interface
 		mid.intelligence += 10 * lv;
 		mid.agility += 10 * lv;
 		mid.strength += 10 * lv;
+
+		mid.speed_base += 8 + lv;
+		mid.speed_mutiply += 1 + 1.0f / lv;
 	}
 
 	public void bind_view (view_interface v)

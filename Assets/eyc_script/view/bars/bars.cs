@@ -15,6 +15,8 @@ public class bars : MonoBehaviour, view_interface {
 	RectTransform level_number_transfrom;
 	Text level_number_text;
 
+	Text debug_info;
+
 	RectTransform bar_exp_transform;
 	RectTransform bar_exp_bkg_transform;
 
@@ -42,6 +44,8 @@ public class bars : MonoBehaviour, view_interface {
 
 		bag_transform = GameObject.Find ("bag").GetComponent<RectTransform> ();
 
+		debug_info = GameObject.Find ("debug").GetComponent<Text> ();
+
 		com.p.hp.bind_view (this);
 		com.p.mp.bind_view (this);
 		com.p.mp.bind_view (this);
@@ -55,7 +59,26 @@ public class bars : MonoBehaviour, view_interface {
 		modified = true;
 	}
 
+
+	int debug_frameCounter = 0;
+	float debug_timeCounter = 0.0f;
+	float debug_lastFramerate = 0.0f;
+	public float debug_refreshTime = 0.5f;
+
 	void LateUpdate() {
+		if (debug_timeCounter < debug_refreshTime) {
+			debug_timeCounter += Time.deltaTime;
+			debug_frameCounter++;
+		} else {
+			//This code will break if you set your debug_refreshTime to 0, which makes no sense.
+			debug_lastFramerate = (float)debug_frameCounter / debug_timeCounter;
+			debug_frameCounter = 0;
+			debug_timeCounter = 0.0f;
+		}
+		debug_info.text = "";
+		debug_info.text += debug_lastFramerate;
+
+
 		BAR_HEIGHT = Screen.height / 20;
 
 		if (modified) {

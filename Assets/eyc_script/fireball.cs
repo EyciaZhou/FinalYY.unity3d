@@ -16,6 +16,8 @@ public class fireball : MonoBehaviour {
 	public System.Guid uuid { get; private set; }
 	public GameObject target { get; set; }
 	public float size { get; private set; }
+	public Quaternion rotation_after_losse { get; private set; }
+	public float Hurt { get; private set; }
 
 	private float _scale;
 	public float scale {
@@ -24,31 +26,33 @@ public class fireball : MonoBehaviour {
 			_scale = value;
 			if (go != null) {
 				go.GetComponent<ParticleSystem> ().startSize = size * value;
-				//go.transform.localScale = value;
 			}
 		}
 	}
 
 	public static fireball new_fireball(GameObject go_to_instantiate, float default_size, 
-		float alive_time_after_loose, float speed, Vector3 default_postion) {
+		float alive_time_after_losse, float speed, Vector3 default_postion, Quaternion rotation_after_losse, 
+		float hurt) {
 
 		GameObject go = (GameObject) Instantiate(go_to_instantiate, default_postion, new Quaternion());
 		fireball fb = go.AddComponent<fireball> ();
 
+		fb.rotation_after_losse = rotation_after_losse;
 		fb.uuid = System.Guid.NewGuid();
-		fb.alive_time_after_losse = alive_time_after_loose;
+		fb.alive_time_after_losse = alive_time_after_losse;
 		fb.size = default_size;
 		fb.status = fire_status.stay;
 		fb.go = go;
 		fb.speed = speed;
+		fb.go.GetComponent<ParticleSystem> ().simulationSpace = ParticleSystemSimulationSpace.Local;
 
 		return fb;
 	}
 
 	public static fireball new_fireball(GameObject go_to_instantiate, float default_size, 
-		float alive_time_after_loose, GameObject target, Vector3 default_postion, float speed) {
+		float alive_time_after_loose, float speed, Vector3 default_postion, Quaternion rotation_after_losse, float hurt, GameObject target) {
 
-		fireball fb = new_fireball (go_to_instantiate, default_size, alive_time_after_loose, speed, default_postion);
+		fireball fb = new_fireball (go_to_instantiate, default_size, alive_time_after_loose, speed, default_postion, rotation_after_losse, hurt);
 		fb.target = target;
 		fb.losse();
 
@@ -56,10 +60,10 @@ public class fireball : MonoBehaviour {
 	}
 
 	public static fireball new_fireball(GameObject go_to_instantiate, float default_size, 
-		float alive_time_after_loose, GameObject target, Vector3 default_postion, float speed,
-		float time_to_loose) {
+		float alive_time_after_loose, float speed, Vector3 default_postion, Quaternion rotation_after_losse, float hurt,
+		GameObject target, float time_to_loose) {
 
-		fireball fb = new_fireball (go_to_instantiate, default_size, alive_time_after_loose, speed, default_postion);
+		fireball fb = new_fireball (go_to_instantiate, default_size, alive_time_after_loose, speed, default_postion, rotation_after_losse, hurt);
 		fb.target = target;
 		com.ts.add_hourglass(time_to_loose, () => {
 			fb.losse();
@@ -71,6 +75,9 @@ public class fireball : MonoBehaviour {
 	public void losse() {
 		this.status = fire_status.losse;
 		go.transform.parent = null;
+		go.transform.rotation = rotation_after_losse;
+		go.GetComponent<ParticleSystem> ().simulationSpace = ParticleSystemSimulationSpace.World;
+
 
 		com.ts.add_hourglass (alive_time_after_losse, () => {
 			Destroy(go);

@@ -7,8 +7,6 @@ public class com : MonoBehaviour
 
 	public	static	wave_controler	monster;
 	public	static	thing_control things;
-//	public	static	buff_manager buffs;
-//	public	static	exp_handler exp;
 	public	static	hourglass_manager ts;
 	public	static	camera_and_input ci;
 	public	static	fire_manager fires;
@@ -17,7 +15,6 @@ public class com : MonoBehaviour
 	public	static	float	c_Jmped;
 	public	static	float	c_Spd = 10.0f;
 
-	public	static	t.buff_set b;
 	
 	static	float	Spd = 30.0f;
 	static	float	SpdUpTime = 0.0f;

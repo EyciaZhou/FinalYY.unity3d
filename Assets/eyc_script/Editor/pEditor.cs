@@ -15,6 +15,8 @@ public class pEditor : Editor {
 			EditorGUILayout.FloatField ("exp_reach", p.exp.current);
 			EditorGUILayout.LongField ("hp", p.hp.point);
 			EditorGUILayout.LongField ("hp_max", p.hp.max_point);
+			EditorGUILayout.LongField ("mp", p.mp.point);
+			EditorGUILayout.LongField ("mp_max", p.mp.max_point);
 		}
 	}
 }

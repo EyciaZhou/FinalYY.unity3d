@@ -68,7 +68,7 @@ public class mana_handler : MonoBehaviour, controller_interface
 			return false;
 		}
 		
-		if (point > this.point) {
+		if (point >= this.point) {
 			foreach (t_mana_out_callback cb in mana_out_callbacks) {
 				cb ();
 			}

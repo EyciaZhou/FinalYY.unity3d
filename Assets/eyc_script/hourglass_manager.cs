@@ -105,10 +105,6 @@ public class hourglass_manager : MonoBehaviour {
 			hourglasses.Remove (id);
 		}
 
-		if (lst_remove.Count > 0) {
-			Debug.Log (lst_remove.Count + "");
-		}
-
 		lst_remove.Clear ();
 
 		foreach (KeyValuePair<System.Guid, dot> kp in dots) {

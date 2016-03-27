@@ -26,13 +26,13 @@ public enum ring_rare
 public class ring : good
 {
 	//一坨buff
-	public List<t.buff> buffs;
+	//public List<t.buff> buffs;
 	//在界面显示的图片的id，由com中控制总数并根据总数分
 	int pic_num;
 	public bool _using = false;
 
 	ring_rare rare;
-
+	/*
 	public void add_buff (t.buff _buff)
 	{
 		this.buffs.Add (_buff);
@@ -46,6 +46,7 @@ public class ring : good
 		this.pic_num = pic_num;
 		this.rare = rare;
 	}
+	*/
 }
 
 public class hp_bottle : good
@@ -118,7 +119,7 @@ public class thing_control : MonoBehaviour
 
 	public void use_ring (int id)
 	{
-		if (!rings [id]._using) {
+		/*if (!rings [id]._using) {
 			Dictionary<t.buff, float> temp = new Dictionary<t.buff, float> ();
 			rings [id]._using = true;
 			foreach (t.buff buff in rings[id].buffs) {
@@ -126,7 +127,7 @@ public class thing_control : MonoBehaviour
 			}
 //			string uuid = com.buffs.add_buff (temp);
 //			used_rings.Add (id, uuid);
-		}
+		}*/
 	}
 
 	public void unuse_ring (int id)

@@ -10,6 +10,9 @@ public class player : MonoBehaviour {
 	public exp_handler exp { get; private set; }
 	public fire_ring fr { get; private set; }
 	public attributes_manager am { get; private set; }
+	public skill sk { get; private set; }
+
+	public fire_ring_view fr_view { get; private set; }
 
 	// Use this for initialization
 	void Start () {
@@ -24,6 +27,8 @@ public class player : MonoBehaviour {
 		mp = game_object.AddComponent<mana_handler> ();
 		exp = game_object.AddComponent<exp_handler> ();
 		fr = game_object.AddComponent<fire_ring> ();
+		sk = game_object.AddComponent<skill> ();
+		fr_view = game_object.AddComponent<fire_ring_view> ();
 
 		am.bind_controller (hp);
 		am.bind_controller (mp);
@@ -45,7 +50,8 @@ public class player : MonoBehaviour {
 			attr.max_mp = mid.intelligence * 20;
 			attr.recovery_mana_per_second = mid.intelligence * 0.1f;
 
-		}, "hp&mp");
+			attr.speed = (mid.speed_base + mid.speed_addition) * mid.speed_mutiply;
+		}, "hp&mp&speed");
 	}
 	
 	// Update is called once per frame

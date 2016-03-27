@@ -105,13 +105,12 @@ public class camera_and_input : MonoBehaviour
 					GetComponent<Animation>().CrossFade (jumpClipName);
 
 				rig.e_rotate_to (new Vector3 (0, 90 - f.vector2_to_angle_deg (move.joystickAxis), 0));
-				rig.e_move_local (Vector3.forward * com.c_Spd * Time.deltaTime * move.joystickValue.magnitude);
+				rig.e_move_local (Vector3.forward * com.p.am.attr.speed * Time.deltaTime * move.joystickValue.magnitude);
 			}
 		}
 
 		if (move.joystickName == AttackJoystickName) {
-			com.fires.new_fire_ball_default ().target = GameObject.Find ("target");
-			Debug.Log (GameObject.Find ("target").name);
+			com.p.sk.small_fireball_from_bar (Quaternion.Euler(new Vector3 (0, 90 - f.vector2_to_angle_deg (move.joystickAxis), 0)));
 		}
 	}
 
