@@ -13,6 +13,7 @@ public class hourglass_manager : MonoBehaviour {
 
 		callback cb;
 		bool _pause = false;
+		bool _stop = false;
 
 		public hourglass(float target, callback cb) {
 			this.target = target;
@@ -21,6 +22,8 @@ public class hourglass_manager : MonoBehaviour {
 		}
 
 		public bool update_time_and_rise_if_necessary() {
+			if (_stop)
+				return true;
 			if (_pause)
 				return false;
 			target -= Time.deltaTime;
@@ -35,6 +38,14 @@ public class hourglass_manager : MonoBehaviour {
 		public void pause() {
 			_pause = true;
 		}
+
+		public void not_pause() {
+			_pause = false;
+		}
+
+		public void stop() {
+			_pause = _stop = true;
+		}
 	}
 
 	public class dot
@@ -47,6 +58,7 @@ public class hourglass_manager : MonoBehaviour {
 		callback cb_each;
 		callback when_end;
 		bool _pause = false;
+		bool _stop = false;
 
 		public dot(float target, float duration, callback cb_each, callback when_end) {
 			this.target = target;
@@ -77,6 +89,14 @@ public class hourglass_manager : MonoBehaviour {
 
 		public void pause() {
 			_pause = true;
+		}
+
+		public void not_pause() {
+			_pause = false;
+		}
+
+		public void stop() {
+			_pause = _stop = true;
 		}
 	}
 

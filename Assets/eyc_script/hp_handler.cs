@@ -8,7 +8,8 @@ public class hp_handler : MonoBehaviour, controller_interface
 	public delegate bool t_cannot_dead_callback ();
 
 	public int point { get; private set; }
-	public int max_point { get; private set; }
+	private int _max_point;
+	public int max_point { get {return _max_point;} set { point = _max_point = value; } }
 	public float recovery_per_second { get; private set; }
 
 	private float recovery_last;
@@ -37,10 +38,7 @@ public class hp_handler : MonoBehaviour, controller_interface
 		this.recovery_per_second = am.attr.recovery_per_second;
 
 		modified = true;
-
-
 		Debug.Log ("hp update_controller");
-
 	}
 
 	public void bind_view(view_interface v) {

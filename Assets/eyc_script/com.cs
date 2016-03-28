@@ -10,6 +10,7 @@ public class com : MonoBehaviour
 	public	static	hourglass_manager ts;
 	public	static	camera_and_input ci;
 	public	static	fire_manager fires;
+	public	static	coin_manager coins;
 	public	static	Transform tr;
 
 	public	static	float	c_Jmped;
@@ -33,27 +34,7 @@ public class com : MonoBehaviour
 	{
 		ts = gameObject.AddComponent<hourglass_manager> ();
 		fires = gameObject.AddComponent<fire_manager> ();
-
-		/*monster = GetComponent<wave_controler> ();
-		things = GetComponent<thing_control> ();
-		buffs = GetComponent<buff_manager> ();
-		hp = GetComponent<hp_handler> ();
-		mp = GetComponent<mana_handler> ();
-		exp = GetComponent<exp_handler> ();
-		go = GetComponent<player_controler> ();
-		rig = GetComponent<rigv3> ();
-		tr = GetComponent<Transform> ();*/
-
-		/*
-		monster.init ();
-		things.init ();
-		buffs.init ();
-		hp.init ();
-		mp.init ();
-		exp.init ();
-		go.init ();
-		rig.init ();
-		*/
+		coins = gameObject.AddComponent<coin_manager> ();
 	}
 
 	public static void API_GainExp (int ex)
