@@ -56,21 +56,25 @@ public class camera_and_input : MonoBehaviour
 	//摄像机下潜角度
 
 	//重力模块
-	rigv3	rig = null;
+	//rigv3	rig = null;
+
+	Vector3 target_ea;
 
 	public void init ()
 	{
-		rig = GetComponent<rigv3> ();
+		//rig = GetComponent<rigv3> ();
 		cam = Camera.main;
 
-		if (rig == null) {
-			rig = gameObject.AddComponent<rigv3> ();
-		}
+		//if (rig == null) {
+			//rig = gameObject.AddComponent<rigv3> ();
+		//}
 	}
 
 	void Update ()
 	{
 		UpdateSW ();	//测定滚轮程度
+
+		f.slow_follow_rotation (transform, target_ea, 10);
 	}
 
 	void LateUpdate ()
@@ -90,22 +94,28 @@ public class camera_and_input : MonoBehaviour
 		//停止时，角色恢复idle
 		if (move.joystickName == movingJoystickName) {
 			GetComponent<Animation>().CrossFade (idleClipName);
+			gameObject.GetComponent<NavMeshAgent> ().enabled = false;
 		}
 	}
 
 	void OnJoystickMove (MovingJoystick move)
 	{
 		if (move.joystickName == movingJoystickName) {
+
+			gameObject.GetComponent<NavMeshAgent> ().enabled = true;
 			if (move.joystickAxis.magnitude == 0) {
 				GetComponent<Animation>().CrossFade (idleClipName);
 			} else {
-				if (!rig.e_jumped ())
-					GetComponent<Animation>().CrossFade (runClipName);
-				else
-					GetComponent<Animation>().CrossFade (jumpClipName);
+				//if (!rig.e_jumped ())
+				GetComponent<Animation>().CrossFade (runClipName);
+				//else
+				//	GetComponent<Animation>().CrossFade (jumpClipName);
 
-				rig.e_rotate_to (new Vector3 (0, 90 - f.vector2_to_angle_deg (move.joystickAxis), 0));
-				rig.e_move_local (Vector3.forward * com.p.am.attr.speed * Time.deltaTime * move.joystickValue.magnitude);
+				target_ea = new Vector3 (0, 90 - f.vector2_to_angle_deg (move.joystickAxis), 0);
+				gameObject.GetComponent<NavMeshAgent> ().Move(transform.forward * com.p.am.attr.speed * Time.deltaTime);
+
+				//rig.e_rotate_to (new Vector3 (0, 90 - f.vector2_to_angle_deg (move.joystickAxis), 0));
+				//rig.e_move_local (Vector3.forward * com.p.am.attr.speed * Time.deltaTime * move.joystickValue.magnitude);
 			}
 		}
 

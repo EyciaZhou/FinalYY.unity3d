@@ -82,8 +82,17 @@ public class rigv3 : MonoBehaviour
 
 	public void e_lookat (Vector3 pos)
 	{
+		Quaternion tmp = transform.rotation;
 		transform.LookAt (pos);
 		target_angle = transform.eulerAngles;
+		transform.rotation = tmp;
+	}
+
+	public void e_lookat_and_keep_vertical (Vector3 pos) {
+		Quaternion tmp = transform.rotation;
+		transform.LookAt (pos);
+		target_angle = new Vector3(0, transform.eulerAngles.y, 0);
+		transform.rotation = tmp;
 	}
 
 	Vector3 check (Vector3 p1, Vector3 p2, Vector3 movement, int c, bool callback = false)
@@ -99,7 +108,7 @@ public class rigv3 : MonoBehaviour
 
 		 //print(delta_move);
 
-		if (c > 1) {	//最多递归2层		TODO 疑似超过2层有bug
+		if (c > 2) {	//最多递归2层		TODO 疑似超过2层有bug
 			return Vector3.zero;
 		}
 
@@ -114,7 +123,7 @@ public class rigv3 : MonoBehaviour
 		float min = 1e9f;
 		int mi = -1;
 		for (int i = 0; i < rhs.Length; i++) {	//找出最近的碰撞，因为是直线碰撞，所以distance即为最小运动距离
-			if (rhs [i].distance < min && rhs [i].collider.gameObject.name != gameObject.name) {
+			if (rhs [i].distance < min && rhs [i].collider.gameObject != gameObject) {
 				min = rhs [i].distance;
 				mi = i;
 			}
@@ -128,8 +137,9 @@ public class rigv3 : MonoBehaviour
 			movement -= dir * 0.001f;
 		}
 
-		if (mi >= 0 && movement.y == 0) {	//进行反弹，如果对有y轴移动的物体进行反弹，会使角色出现漂移
+		if (mi >= 0 && Mathf.Abs(movement.y) < Mathf.Epsilon) {	//进行反弹，如果对有y轴移动的物体进行反弹，会使角色出现漂移
 			Vector3 refc = Vector3.Reflect (dir, rhs [mi].normal) * 0.1f;
+			Debug.Log ("reflect" +  refc);
 			movement += check (p1 + movement, p2 + movement, refc, c + 1) - dir * 0.001f;
 		}
 		if (callback && mi >= 0 && c == 1) {	//仅对第一层递归进行触发
@@ -138,7 +148,7 @@ public class rigv3 : MonoBehaviour
 		return movement;
 	}
 
-	public void init ()
+	void Start ()
 	{
 		CapsuleCollider coll = GetComponent<CapsuleCollider> ();
 		coll_radius = coll.radius;
@@ -168,11 +178,13 @@ public class rigv3 : MonoBehaviour
 		p2 += res;
 		center += res;
 
+
 		src = transform.TransformDirection (delta_move);	//判定移动
 		res = check (p1, p2, src, 1, true);
 		p1 += res;
 		p2 += res;
 		center += res;
+
 
 		src = Vector3.down * foots;	//判定脚步掉落
 		res = check (p1, p2, src, 1);
@@ -180,7 +192,8 @@ public class rigv3 : MonoBehaviour
 		p2 += res;
 		center += res;
 
-		if (center.y == 0 || Physics.CapsuleCast (p1, p2, coll_radius, Vector3.down, 0.1f)) {
+
+		if (Physics.CapsuleCast (p1, p2, coll_radius, Vector3.down, 0.001f)) {
 			if (v >= 0) {	//考虑到跳跃问题
 				v = 0;
 			}

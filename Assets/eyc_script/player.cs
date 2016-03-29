@@ -48,9 +48,13 @@ public class player : MonoBehaviour {
 			attr.recovery_per_second = mid.strength * 0.1f;
 
 			attr.max_mp = mid.intelligence * 20;
-			attr.recovery_mana_per_second = mid.intelligence * 0.1f;
+			attr.recovery_mana_per_second = mid.intelligence * 1f;
 
 			attr.speed = (mid.speed_base + mid.speed_addition) * mid.speed_mutiply;
+
+			attr.exp_extra = mid.exp_extra;
+			attr.exp_mutiply = mid.exp_mutiply;
+			attr.coin_raidus = mid.coin_raidus;
 		}, "hp&mp&speed");
 	}
 	

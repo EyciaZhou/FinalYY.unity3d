@@ -95,6 +95,11 @@ public class hourglass_manager : MonoBehaviour {
 			_pause = false;
 		}
 
+		public void not_pause_and_start_immedia() {
+			_pause = false;
+			reach = duration;
+		}
+
 		public void stop() {
 			_pause = _stop = true;
 		}

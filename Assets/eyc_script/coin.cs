@@ -8,7 +8,10 @@ public class coin : MonoBehaviour {
 		this.coin_num = coin_num;
 	}
 
-	void OnTriggerEnter(Collider renwu) {
-		com.coins.gain (coin_num);
+	void OnTriggerEnter(Collider other) {
+		if (other.gameObject.tag == "coin_collector") {
+			com.coins.gain (coin_num);
+			Destroy (gameObject);
+		}
 	}
 }

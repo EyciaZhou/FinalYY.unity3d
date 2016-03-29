@@ -24,8 +24,12 @@ public class exp_handler : MonoBehaviour , controller_interface, buff_interface
 		mid.agility += 10 * lv;
 		mid.strength += 10 * lv;
 
-		mid.speed_base += 8 + lv;
-		mid.speed_mutiply += 1 + 1.0f / lv;
+		mid.speed_base += 5 + lv / 2;
+		mid.speed_mutiply += 1 + 0.5f / lv;
+
+		mid.exp_mutiply += 1;
+
+		mid.coin_raidus += 1;
 	}
 
 	public void bind_view (view_interface v)
@@ -61,7 +65,7 @@ public class exp_handler : MonoBehaviour , controller_interface, buff_interface
 
 	public void clear ()
 	{
-		lv = 3;
+		lv = 10;
 		current = 0;
 		limit = exp_calu (lv);
 	}
@@ -117,7 +121,9 @@ public class exp_handler : MonoBehaviour , controller_interface, buff_interface
 	void LateUpdate() {
 		if (modified) {
 			modified = false;
-			view.update_view ();
+			if (view != null) {
+				view.update_view ();
+			}
 		}
 	}
 }

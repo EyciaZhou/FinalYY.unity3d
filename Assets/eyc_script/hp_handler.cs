@@ -41,6 +41,10 @@ public class hp_handler : MonoBehaviour, controller_interface
 		Debug.Log ("hp update_controller");
 	}
 
+	public float getRate() {
+		return (float)point / max_point;
+	}
+
 	public void bind_view(view_interface v) {
 		this.view = v;
 	}
@@ -75,6 +79,9 @@ public class hp_handler : MonoBehaviour, controller_interface
 	public void hurt (int point/*, Color c1, Color c2*/)
 	{
 		if (point < 0) {
+			return;
+		}
+		if (this.point <= 0) {
 			return;
 		}
 		this.point -= point;
@@ -144,7 +151,10 @@ public class hp_handler : MonoBehaviour, controller_interface
 			//Debug.Log ("hp");
 
 			modified = false;
-			view.update_view ();
+
+			if (view != null) {
+				view.update_view ();
+			}
 		}
 	}
 }

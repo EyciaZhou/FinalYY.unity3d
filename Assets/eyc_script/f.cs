@@ -31,6 +31,14 @@ public class f {
 		}
 	}
 
+	static public void slow_follow_rotation(Transform transform, Vector3 target_rotation, float speed) {
+		if (speed * Time.deltaTime > 1) {
+			transform.eulerAngles = target_rotation;
+		} else {
+			transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.Euler (target_rotation), speed * Time.deltaTime);
+		}
+	}
+
 	static public void slow_follow_localpostion(Transform transform, Vector3 target_pos, float speed) {
 		if (speed * Time.deltaTime > 1) {
 			transform.localPosition = target_pos;

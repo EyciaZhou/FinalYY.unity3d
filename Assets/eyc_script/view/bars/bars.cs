@@ -48,7 +48,7 @@ public class bars : MonoBehaviour, view_interface {
 
 		com.p.hp.bind_view (this);
 		com.p.mp.bind_view (this);
-		com.p.mp.bind_view (this);
+		com.p.exp.bind_view (this);
 	}
 
 	void Update() {
@@ -87,7 +87,7 @@ public class bars : MonoBehaviour, view_interface {
 			int hp_mx = com.p.hp.max_point;
 			int hp_cur = com.p.hp.point;
 
-			bag_transform.anchoredPosition = new Vector2 (BAR_HEIGHT * 2, -BAR_HEIGHT * 2);
+			bag_transform.anchoredPosition = new Vector2 (BAR_HEIGHT * 2, 0);
 			bag_transform.sizeDelta = new Vector2 (BAR_HEIGHT * 3, BAR_HEIGHT * 3);
 
 			bar_top_center_transfrom.anchoredPosition = new Vector2 (0, -BAR_HEIGHT);

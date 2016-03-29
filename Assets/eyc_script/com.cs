@@ -5,13 +5,13 @@ public class com : MonoBehaviour
 {
 	public static player p;
 
-	public	static	wave_controler	monster;
-	public	static	thing_control things;
+	public	static	wave_controler	mon;
+	//public	static	thing_control things;
 	public	static	hourglass_manager ts;
 	public	static	camera_and_input ci;
 	public	static	fire_manager fires;
 	public	static	coin_manager coins;
-	public	static	Transform tr;
+
 
 	public	static	float	c_Jmped;
 	public	static	float	c_Spd = 10.0f;
@@ -32,6 +32,7 @@ public class com : MonoBehaviour
 
 	void Start ()
 	{
+		mon = gameObject.AddComponent<wave_controler> ();
 		ts = gameObject.AddComponent<hourglass_manager> ();
 		fires = gameObject.AddComponent<fire_manager> ();
 		coins = gameObject.AddComponent<coin_manager> ();

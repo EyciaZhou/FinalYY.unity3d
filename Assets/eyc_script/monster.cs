@@ -10,26 +10,27 @@ public class monster : MonoBehaviour {
 	}
 
 	public monster_status status;
-	private float v, hurt_cd;
+	private float hurt_cd;
 	private hp_handler hp;
 	private int exp, coin_min, coin_max, hurt;
-	private monster_look_i ml;
-	private rigv3 rig;
+	private monster_look ml;
 	private hourglass_manager.dot dot;
 
-	static public monster new_monster(monster_look_i mo_typ, float v, float hurt_cd, int coin_min, 
+	private NavMeshAgent nav_mesh_agent;
+
+	static public monster new_monster(monster_look mo_typ, float v, float hurt_cd, int coin_min, 
 		int coin_max, int hp, int hurt, int exp, Vector3 pos) {
 		GameObject mo = Instantiate (mo_typ.go);
 		mo.tag = "em";
 
 		monster m = mo.AddComponent<monster> ();
 		m.hp = mo.AddComponent<hp_handler> ();
-		m.rig = mo.AddComponent<rigv3> ();
-		m.v = v;
+		//m.v = v;
 		m.hurt_cd = hurt_cd;
 		m.coin_min = coin_min;
 		m.coin_max = coin_max;
 		m.hp.init ();
+		m.hp.add_dead_callback (m.dead);
 		m.hp.max_point = hp;
 		m.hurt = hurt;
 		m.exp = exp;
@@ -38,19 +39,27 @@ public class monster : MonoBehaviour {
 
 		mo.transform.position = pos;
 
+		if (m.GetComponent<NavMeshAgent> () == null) {
+			m.nav_mesh_agent = m.gameObject.AddComponent<NavMeshAgent> ();
+		} else {
+			m.nav_mesh_agent = m.GetComponent<NavMeshAgent> ();
+		}
+
+		m.nav_mesh_agent.speed = v;
+
 		return m;
 	}
 
 	private void destory() {
-		Destroy (this);
+		Destroy (gameObject);
 	}
 
 	private void dead() {
 		status = monster_status.dead;
 		coin_manager.drop (Random.Range (coin_min, coin_max), gameObject.transform.position);
-		rig.enabled = false;
 		gameObject.GetComponent<CapsuleCollider> ().enabled = false;
 		gameObject.GetComponent<Animation> ().CrossFade (ml.dead_look);
+		nav_mesh_agent.enabled = false;
 		com.p.exp.gain_exp (exp);
 		com.ts.cancle_dot (dot);
 		Invoke ("destory", 10);
@@ -73,12 +82,10 @@ public class monster : MonoBehaviour {
 		switch (status) {
 		case monster_status.follow:
 			gameObject.GetComponent<Animation> ().CrossFade (ml.walk_look);
-			rig.e_lookat (com.p.transform.position);
-			rig.e_move_local (Vector3.forward * Time.deltaTime * v);
-
+			gameObject.GetComponent<NavMeshAgent>().SetDestination(com.p.transform.position);
 			if ((transform.position - com.p.transform.position).sqrMagnitude < 2) {
 				status = monster_status.stop_to_attack;
-				dot.not_pause ();
+				dot.not_pause_and_start_immedia ();
 			}
 			break;
 

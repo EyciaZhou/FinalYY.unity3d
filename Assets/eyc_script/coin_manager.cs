@@ -6,12 +6,16 @@ public class coin_manager : MonoBehaviour {
 	private static GameObject mid_staff;
 	private static GameObject sml_staff;
 
-	int hv_coin;
+	public int hv_coin { get; private set; }
+
+	private SphereCollider coin_collector;
 
 	void Start() {
 		big_staff = Resources.Load<GameObject> ("coin/big_staff");
 		mid_staff = Resources.Load<GameObject> ("coin/mid_staff");
 		sml_staff = Resources.Load<GameObject> ("coin/sml_staff");
+
+		coin_collector = GameObject.Find ("coin_collector").GetComponent<SphereCollider> ();
 	}
 
 	public static coin drop(int coin_num, Vector3 position) {
@@ -24,6 +28,7 @@ public class coin_manager : MonoBehaviour {
 		}
 
 		GameObject c = (GameObject)Instantiate (to_ins, position, Quaternion.Euler(Vector3.zero));
+		c.tag = "coin";
 		coin c_s = c.AddComponent<coin> ();
 
 		c_s.coin_num = coin_num;
@@ -37,6 +42,6 @@ public class coin_manager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-	
+		coin_collector.radius = com.p.am.attr.coin_raidus;
 	}
 }

@@ -63,6 +63,8 @@ public class attributes_manager : MonoBehaviour {
 		public int small_fireball_cost;
 		public float small_fireball_coldtime;
 
+		public float coin_raidus;
+
 		public Dictionary<string, Object> attr_dic = new Dictionary<string, Object> ();
 	}
 
@@ -79,6 +81,8 @@ public class attributes_manager : MonoBehaviour {
 		public int exp_extra;
 
 		public int small_fireball_level;
+
+		public float coin_raidus;
 	}
 
 	private t_mid_attributes mid;

@@ -22,7 +22,7 @@ public class fire_manager : MonoBehaviour {
 			go_fireball_normal_hit,
 			1,
 			10,
-			20,
+			10,
 			parent.position,
 			world_rotation,
 			hurt,
@@ -47,7 +47,6 @@ public class fire_manager : MonoBehaviour {
 	}
 
 	public void remove_fire_ball(fireball fb) {
-		Destroy (fb.gameObject);
 		fireballs.Remove (fb.uuid);
 	}
 }

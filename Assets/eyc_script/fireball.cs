@@ -49,6 +49,7 @@ public class fireball : MonoBehaviour {
 		fb.Hurt = hurt;
 		fb.boom = boom;
 		fb.go.GetComponent<ParticleSystem> ().simulationSpace = ParticleSystemSimulationSpace.Local;
+		go.GetComponent<CapsuleCollider> ().enabled = false;
 
 		return fb;
 	}
@@ -81,11 +82,11 @@ public class fireball : MonoBehaviour {
 		go.transform.parent = null;
 		go.transform.rotation = rotation_after_losse;
 		go.GetComponent<ParticleSystem> ().simulationSpace = ParticleSystemSimulationSpace.World;
-
+		go.GetComponent<CapsuleCollider> ().enabled = true;
 
 		com.ts.add_hourglass (alive_time_after_losse, () => {
-			Destroy(go);
 			status = fire_status.invaild;
+			com.fires.remove_fire_ball(this);
 		});
 	}
 

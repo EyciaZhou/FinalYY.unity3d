@@ -12,7 +12,7 @@ public class ri : MonoBehaviour
 
 	public void DestroyMe ()
 	{
-		transform.position = com.tr.position + new Vector3 (f.RandomFloat (15f, -15f), 0, f.RandomFloat (15f, -15f));
+		transform.position = com.p.transform.position + new Vector3 (f.RandomFloat (15f, -15f), 0, f.RandomFloat (15f, -15f));
 	}
 
 	// Update is called once per frame
