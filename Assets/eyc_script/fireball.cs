@@ -13,7 +13,7 @@ public class fireball : MonoBehaviour {
 	private GameObject boom { get; set; }
 	private float alive_time_after_losse { get; set; }
 	private float speed { get; set; }
-	public fire_status status { get; private set; }
+	public fire_status status;
 	public System.Guid uuid { get; private set; }
 	public GameObject target { get; set; }
 	public float size { get; private set; }
@@ -85,9 +85,15 @@ public class fireball : MonoBehaviour {
 		go.GetComponent<CapsuleCollider> ().enabled = true;
 
 		com.ts.add_hourglass (alive_time_after_losse, () => {
-			status = fire_status.invaild;
-			com.fires.remove_fire_ball(this);
+			if (status != fire_status.invaild) {
+				destory();
+			}
 		});
+	}
+
+	void destory() {
+		status = fire_status.invaild;
+		Destroy (gameObject);
 	}
 
 	void Update() {
@@ -118,15 +124,13 @@ public class fireball : MonoBehaviour {
 	}
 
 	void OnTriggerEnter (Collider renwu) {
-		Debug.Log ("enter");
 		if (renwu.gameObject.tag == "em" && status == fire_status.losse) {
 			hp_handler hp = renwu.GetComponent<hp_handler> ();
 			if (hp != null) {
 				hp.hurt ((int)(Hurt));
 			}
 			Instantiate (boom, transform.position, transform.rotation);
-			Destroy (gameObject);
-			status = fire_status.invaild;
+			destory ();
 		}
 	}
 }

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class wave_controler : MonoBehaviour
 {
 	public List<monster> monsters = new List<monster> ();
-	public GameObject nearest_monster;
 
 	private List<monster_look> monster_looks = new List<monster_look> ();
 
@@ -20,7 +19,8 @@ public class wave_controler : MonoBehaviour
 
 	void Start() {
 		wave = 0;
-		for (int i = 0; i < configs.Length; i++) {
+		for (int i = 0; i < 5; i++) {
+			Debug.Log (i);
 			monster_looks.Add (new monster_look ((GameObject)Resources.Load (configs [i, 0]), configs [i, 1], configs [i, 2], configs [i, 3], configs [i,4]));
 		}
 	}
@@ -36,6 +36,7 @@ public class wave_controler : MonoBehaviour
 		if (wave % 2 == 1 && monsters.Count == 0) {
 			wave++;
 		} else {
+			/*
 			float max = 1e10f;
 			foreach (monster go in monsters) {
 				if ((go.transform.position - com.p.transform.position).sqrMagnitude < max) {
@@ -43,11 +44,12 @@ public class wave_controler : MonoBehaviour
 					nearest_monster = go.gameObject;
 				}
 			}
+			*/
 			monsters.RemoveAll (item => item.GetComponent<monster> ().status == monster.monster_status.dead);
 		}
-		if (wave / 2 == 0 && wave % 2 == 0) {
+		if (wave % 2 == 0) {
 			for (int i = 0; i < 100; i++) {
-				monsters.Add (GenMonster (monster_looks[0], 0.5f, 1, 10, 40, 30, 20, 30, Vector3.right + Vector3.forward * i * 10f));
+				monsters.Add (GenMonster (monster_looks[0], 0.5f, 1, 10, 40, 30, 20, 30, new Vector3(f.RandomFloat(0, 200), 0, f.RandomFloat(0, 200))));
 			}
 			wave++;
 		}

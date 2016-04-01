@@ -48,7 +48,7 @@ public class bars : MonoBehaviour, view_interface {
 
 		com.p.hp.bind_view (this);
 		com.p.mp.bind_view (this);
-		com.p.exp.bind_view (this);
+		com.p.exp.OnExpValueChange += update_view;
 	}
 
 	void Update() {

@@ -6,9 +6,12 @@ public class skill : MonoBehaviour, controller_interface {
 
 	private bool small_fireball_colddown = true;
 
+	private GameObject big_fire_ring_go;
+
 	public void small_fireball_from_bar(Quaternion rotation) {
 		if (small_fireball_colddown) {
 			if (com.p.mp.cost (am.attr.small_fireball_cost)) {
+				com.p.GetComponent<Animator> ().SetTrigger ("fire");
 				com.ts.add_hourglass (
 					am.attr.small_fireball_coldtime, 
 					() => {
@@ -19,6 +22,11 @@ public class skill : MonoBehaviour, controller_interface {
 				small_fireball_colddown = false;
 			}
 		}
+	}
+
+	public void big_fire_ring() {
+		//judge mana
+		Instantiate (big_fire_ring_go, com.p.transform.position, Quaternion.Euler(Vector3.zero));
 	}
 
 	#region controller_interface implementation
@@ -38,10 +46,15 @@ public class skill : MonoBehaviour, controller_interface {
 
 		bar_go = GameObject.Find ("bar_local");
 
+		big_fire_ring_go = Resources.Load<GameObject> ("big_fire_ring/big_fire_ring");
+
 		am.add_attr_calc((mid, attr) => {
 			attr.small_fireball_cost = mid.small_fireball_level * 5 + 30;
 			attr.small_fireball_coldtime = 1.0f / (mid.small_fireball_level+1);
 			attr.small_fireball_hurt = 10 * mid.small_fireball_level + 0.1f * mid.intelligence;
 		}, "small_fireball");
+	}
+
+	void Update() {
 	}
 }

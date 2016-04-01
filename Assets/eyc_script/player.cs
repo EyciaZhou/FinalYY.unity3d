@@ -7,7 +7,7 @@ public class player : MonoBehaviour {
 	public camera_and_input ci { get; private set; }
 	public hp_handler hp { get; private set; }
 	public mana_handler mp { get; private set; }
-	public exp_handler exp { get; private set; }
+	public exp_handler_player exp { get; private set; }
 	public fire_ring fr { get; private set; }
 	public attributes_manager am { get; private set; }
 	public skill sk { get; private set; }
@@ -25,14 +25,13 @@ public class player : MonoBehaviour {
 		ci = game_object.AddComponent<camera_and_input> ();
 		hp = game_object.AddComponent<hp_handler> ();
 		mp = game_object.AddComponent<mana_handler> ();
-		exp = game_object.AddComponent<exp_handler> ();
+		exp = game_object.AddComponent<exp_handler_player> ();
 		fr = game_object.AddComponent<fire_ring> ();
 		sk = game_object.AddComponent<skill> ();
 		fr_view = game_object.AddComponent<fire_ring_view> ();
 
 		am.bind_controller (hp);
 		am.bind_controller (mp);
-		am.bind_controller (exp);
 
 		hp.add_dead_callback (mp.dead);
 

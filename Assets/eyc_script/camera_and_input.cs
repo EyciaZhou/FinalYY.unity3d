@@ -32,9 +32,6 @@ public class camera_and_input : MonoBehaviour
 {
 	Camera cam;
 
-	string idleClipName = "CombatModeB";
-	string runClipName = "Run";
-	string jumpClipName = "JumoRun";
 	string movingJoystickName = "MovingJoystick";
 	string AttackJoystickName = "AttackJoystick";
 
@@ -86,6 +83,20 @@ public class camera_and_input : MonoBehaviour
 	{
 		EasyJoystick.On_JoystickMove += OnJoystickMove;
 		EasyJoystick.On_JoystickMoveEnd += OnJoystickMoveEnd;
+		EasyButton.On_ButtonPress += EasyButton_On_ButtonPress;
+		EasyButton.On_ButtonUp += EasyButton_On_ButtonUp;
+	}
+
+	void EasyButton_On_ButtonUp (string buttonName)
+	{
+		if (buttonName == "big_fire") {
+			com.p.sk.big_fire_ring ();
+		}
+	}
+
+	void EasyButton_On_ButtonPress (string buttonName)
+	{
+		
 	}
 
 	//移动摇杆结束
@@ -93,7 +104,7 @@ public class camera_and_input : MonoBehaviour
 	{
 		//停止时，角色恢复idle
 		if (move.joystickName == movingJoystickName) {
-			GetComponent<Animation>().CrossFade (idleClipName);
+			GetComponent<Animator> ().SetBool ("run", false);
 			gameObject.GetComponent<NavMeshAgent> ().enabled = false;
 		}
 	}
@@ -104,18 +115,11 @@ public class camera_and_input : MonoBehaviour
 
 			gameObject.GetComponent<NavMeshAgent> ().enabled = true;
 			if (move.joystickAxis.magnitude == 0) {
-				GetComponent<Animation>().CrossFade (idleClipName);
+				GetComponent<Animator> ().SetBool ("run", false);
 			} else {
-				//if (!rig.e_jumped ())
-				GetComponent<Animation>().CrossFade (runClipName);
-				//else
-				//	GetComponent<Animation>().CrossFade (jumpClipName);
-
+				GetComponent<Animator>().SetBool("run", true);
 				target_ea = new Vector3 (0, 90 - f.vector2_to_angle_deg (move.joystickAxis), 0);
 				gameObject.GetComponent<NavMeshAgent> ().Move(transform.forward * com.p.am.attr.speed * Time.deltaTime);
-
-				//rig.e_rotate_to (new Vector3 (0, 90 - f.vector2_to_angle_deg (move.joystickAxis), 0));
-				//rig.e_move_local (Vector3.forward * com.p.am.attr.speed * Time.deltaTime * move.joystickValue.magnitude);
 			}
 		}
 

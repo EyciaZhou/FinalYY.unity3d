@@ -2,66 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class exp_handler : MonoBehaviour , controller_interface, buff_interface
+public class exp_handler : MonoBehaviour
 {
-	public delegate void t_lv_up_callback ();
+	public delegate void LvUpAction();
+	public event LvUpAction OnLvUp;
 
 	public float current { get; private set; }
 	public long limit { get; private set; }
 	public int lv { get; private set; }
-
-	List<t_lv_up_callback> callbacks = new List<t_lv_up_callback> ();
-
-	public attributes_manager am{ get; set; }
-	private view_interface view;
-
-	private bool modified = false;
-
-	public void calculate (attributes_manager.t_mid_attributes mid)
-	{
-		//TODO:
-		mid.intelligence += 10 * lv;
-		mid.agility += 10 * lv;
-		mid.strength += 10 * lv;
-
-		mid.speed_base += 5 + lv / 2;
-		mid.speed_mutiply += 1 + 0.5f / lv;
-
-		mid.exp_mutiply += 1;
-
-		mid.coin_raidus += 1;
-	}
-
-	public void bind_view (view_interface v)
-	{
-		this.view = v;
-	}
-
-	public attributes_manager.t_buff_change_callback change_callback { get; set; }
-	public int priority { get; set; }
-
-	public bool vaild {
-		get {
-			return !com.p.hp.is_dead ();
-		}
-	}
-
-	public void update_controller ()
-	{
-		//pass
-	}
-
-	public System.Guid guid { get; private set; }
-
-	public exp_handler() {
-		this.guid = System.Guid.NewGuid ();
-		clear ();
-		priority = 0; //TODO:
-	}
-
-	private long exp_calu(int lv) {
-		return 10 * lv * lv; //TODO:
-	}
 
 	public void clear ()
 	{
@@ -70,9 +18,12 @@ public class exp_handler : MonoBehaviour , controller_interface, buff_interface
 		limit = exp_calu (lv);
 	}
 
-	void Update ()
-	{
-	
+	public exp_handler() {
+		clear ();
+	}
+
+	private long exp_calu(int lv) {
+		return 10 * lv * lv; //TODO:
 	}
 
 	public void init ()
@@ -83,47 +34,23 @@ public class exp_handler : MonoBehaviour , controller_interface, buff_interface
 	void _lvup ()
 	{
 		lv++;
-
 		limit = exp_calu (lv);
-		foreach (t_lv_up_callback cb in callbacks) {
-			cb ();
-		}
+		OnLvUp ();
 	}
 
-	public void lv_up (long mach)
+	public void lv_up (long lvs_to_up)
 	{
-		for (int i = 0; i < mach; i++) {
+		for (int i = 0; i < lvs_to_up; i++) {
 			_lvup ();
 		}
-		modified = true;
 	}
 
 	public void gain_exp (int exp)
 	{
-		current += exp * am.attr.exp_mutiply + am.attr.exp_extra;
+		current += exp;
 		while (current >= limit) {
 			current -= limit;
 			_lvup ();
-		}
-		modified = true;
-	}
-
-	public void add_lv_up_callback (t_lv_up_callback cb)
-	{
-		callbacks.Add(cb);
-	}
-
-	public void remove_lv_up_callback (t_lv_up_callback cb)
-	{
-		callbacks.Remove (cb);
-	}
-
-	void LateUpdate() {
-		if (modified) {
-			modified = false;
-			if (view != null) {
-				view.update_view ();
-			}
 		}
 	}
 }

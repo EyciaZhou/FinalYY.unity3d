@@ -18,9 +18,13 @@ public class monster : MonoBehaviour {
 
 	private NavMeshAgent nav_mesh_agent;
 
+	public System.Guid guid { get; private set; }
+
+	private Rigidbody rig;
+
 	static public monster new_monster(monster_look mo_typ, float v, float hurt_cd, int coin_min, 
 		int coin_max, int hp, int hurt, int exp, Vector3 pos) {
-		GameObject mo = Instantiate (mo_typ.go);
+		GameObject mo = (GameObject)Instantiate (mo_typ.go);
 		mo.tag = "em";
 
 		monster m = mo.AddComponent<monster> ();
@@ -36,6 +40,7 @@ public class monster : MonoBehaviour {
 		m.exp = exp;
 
 		m.ml = mo_typ;
+		m.guid = System.Guid.NewGuid ();
 
 		mo.transform.position = pos;
 
@@ -44,6 +49,8 @@ public class monster : MonoBehaviour {
 		} else {
 			m.nav_mesh_agent = m.GetComponent<NavMeshAgent> ();
 		}
+
+		//m.rig.isKinematic = true;
 
 		m.nav_mesh_agent.speed = v;
 
@@ -104,5 +111,19 @@ public class monster : MonoBehaviour {
 		case monster_status.dead:
 			break;
 		}
+	}
+
+	IEnumerator back(Vector3 direction) {
+		float f = 10;
+		float mcl = 5;
+		while (f > 0) {
+			f -= mcl * Time.deltaTime;
+			transform.position += direction * f * Time.deltaTime;
+			yield return null;
+		}
+	}
+
+	public void hit_back(Vector3 direction) {
+		StartCoroutine (back (direction));
 	}
 }

@@ -43,6 +43,8 @@ using System.Collections.Generic;
 public class attributes_manager : MonoBehaviour {
 	public delegate void t_attr_calc (t_mid_attributes mid, t_attributes attr);
 	public delegate void t_buff_change_callback ();
+	public delegate void t_buff_invaild_callback();
+	public delegate void t_buff_vaild_callback ();
 
 	public t_attributes attr { get; private set; }
 
@@ -90,8 +92,7 @@ public class attributes_manager : MonoBehaviour {
 	private Dictionary<System.Guid, t_attr_calc> attr_calc = new Dictionary<System.Guid, t_attr_calc> ();
 
 	private Dictionary<System.Guid, controller_interface> controllers = new Dictionary<System.Guid, controller_interface>();
-	//private Dictionary<System.Guid, buff_interface> buff_sort_with_guid = new Dictionary<System.Guid, buff_interface>();
-	private List<buff_interface> buff_sort_with_priority = new List<buff_interface>();
+	private Dictionary<System.Guid, buff_interface> buff_sort_with_guid = new Dictionary<System.Guid, buff_interface>();
 
 	private bool changed;
 
@@ -103,7 +104,7 @@ public class attributes_manager : MonoBehaviour {
 
 	private void _calculate_buff_to_mid() {
 		t_mid_attributes mid = new t_mid_attributes ();
-		foreach (buff_interface buff in buff_sort_with_priority) {
+		foreach (buff_interface buff in buff_sort_with_guid.Values) {
 			buff.calculate (mid);
 		}
 		this.mid = mid;
@@ -131,26 +132,26 @@ public class attributes_manager : MonoBehaviour {
 
 	//-------------------------buff----------------------------
 
-	public buff_interface add_buff(buff_interface bi, int priority) {
+/*	public buff_interface add_buff(buff_interface bi, int priority) {
 		bi.priority = priority;
 		return add_buff (bi);
 	}
+*/
 
 	public buff_interface add_buff(buff_interface bi) {
 		bi.am = this;
-		bi.change_callback = on_buff_change;
 
-		//buff_sort_with_guid.Add (bi.guid, bi);
-		buff_sort_with_priority.Add (bi);
-		buff_sort_with_priority.Sort ((buff_interface x, buff_interface y) => x.priority.CompareTo(y.priority));
+		buff_sort_with_guid.Add (bi.guid, bi);
+		//buff_sort_with_priority.Add (bi);
+		//buff_sort_with_priority.Sort ((buff_interface x, buff_interface y) => x.priority.CompareTo(y.priority));
 		changed = true;
 		return bi;
 	}
 
 	public bool remove_buff(buff_interface bi) {
 		if (controllers.ContainsKey(bi.guid)) {
-			buff_sort_with_priority.Remove (bi);
-			//buff_sort_with_guid.Remove (bi.guid);
+//			buff_sort_with_priority.Remove (bi);
+			buff_sort_with_guid.Remove (bi.guid);
 			changed = true;
 			return true;
 		}
@@ -200,8 +201,22 @@ public class attributes_manager : MonoBehaviour {
 		
 	//-----------------------etc---------------------------
 
-	private void on_buff_change() {
+	public void buff_changed() {
 		changed = true;
+	}
+
+	public void buff_changed_from(string name) {
+		changed = true;
+		Debug.Log (name);
+	}
+
+	public void attr_calc_changed() {
+		changed = true;
+	}
+
+	public void attr_calc_changed_fron(string name) {
+		changed = true;
+		Debug.Log (name);
 	}
 	
 	// Update is called once per frame

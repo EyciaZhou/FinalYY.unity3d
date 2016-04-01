@@ -11,11 +11,13 @@ public class coin_manager : MonoBehaviour {
 	private SphereCollider coin_collector;
 
 	void Start() {
+
+		coin_collector = GameObject.Find ("coin_collector").GetComponent<SphereCollider> ();
+
 		big_staff = Resources.Load<GameObject> ("coin/big_staff");
 		mid_staff = Resources.Load<GameObject> ("coin/mid_staff");
 		sml_staff = Resources.Load<GameObject> ("coin/sml_staff");
 
-		coin_collector = GameObject.Find ("coin_collector").GetComponent<SphereCollider> ();
 	}
 
 	public static coin drop(int coin_num, Vector3 position) {
