@@ -42,6 +42,7 @@ using System.Collections.Generic;
  */
 public class attributes_manager : MonoBehaviour {
 	public delegate void t_attr_calc (t_mid_attributes mid, t_attributes attr);
+
 	public delegate void t_buff_change_callback ();
 	public delegate void t_buff_invaild_callback();
 	public delegate void t_buff_vaild_callback ();
@@ -56,7 +57,7 @@ public class attributes_manager : MonoBehaviour {
 		public float recovery_per_second;
 		public float recovery_mana_per_second;
 
-		public float exp_mutiply;
+		public int exp_mutiply;
 		public int exp_extra;
 
 		public float duration_hatch_fireball_in_ring;
@@ -64,6 +65,9 @@ public class attributes_manager : MonoBehaviour {
 		public float small_fireball_hurt;
 		public int small_fireball_cost;
 		public float small_fireball_coldtime;
+
+		public int mp_cost_minus;
+		public int mp_cost_percentage_minus; //100
 
 		public float coin_raidus;
 
@@ -77,22 +81,49 @@ public class attributes_manager : MonoBehaviour {
 
 		public float speed_base;
 		public int speed_addition;
-		public float speed_mutiply;
+		public int speed_mutiply; //100
 
-		public float exp_mutiply;
+		public int exp_mutiply; //100
 		public int exp_extra;
+		public int max_hp_addtion;
+		public int max_mp_addition;
+		public int mp_cost_minus;
+		public int mp_cost_percentage_minus; //100
 
 		public int small_fireball_level;
 
 		public float coin_raidus;
+
+
+
+		public static t_mid_attributes operator+ (t_mid_attributes lhs, t_mid_attributes rhs) {
+			lhs.strength += rhs.strength ;
+			lhs.agility += rhs.agility;
+			lhs.intelligence += rhs.intelligence;
+
+			lhs.speed_base += rhs.speed_base;
+			lhs.speed_addition += rhs.speed_addition;
+			lhs.speed_mutiply += rhs.speed_mutiply;
+
+			lhs.exp_mutiply += rhs.exp_mutiply;
+			lhs.exp_extra += rhs.exp_extra;
+
+			lhs.small_fireball_level += rhs.small_fireball_level;
+
+			lhs.coin_raidus += rhs.coin_raidus;
+
+			return lhs;
+		}
 	}
 
 	private t_mid_attributes mid;
-	private Dictionary<System.Guid, string> attr_calc_name = new Dictionary<System.Guid, string>();
-	private Dictionary<System.Guid, t_attr_calc> attr_calc = new Dictionary<System.Guid, t_attr_calc> ();
+	public event t_attr_calc OnAttrRecalculate;
+
+	//private Dictionary<System.Guid, string> attr_calc_name = new Dictionary<System.Guid, string>();
+	//private Dictionary<System.Guid, t_attr_calc> attr_calc = new Dictionary<System.Guid, t_attr_calc> ();
 
 	private Dictionary<System.Guid, controller_interface> controllers = new Dictionary<System.Guid, controller_interface>();
-	private Dictionary<System.Guid, buff_interface> buff_sort_with_guid = new Dictionary<System.Guid, buff_interface>();
+	private Dictionary<System.Guid, IBuff> buff_sort_with_guid = new Dictionary<System.Guid, IBuff>();
 
 	private bool changed;
 
@@ -104,7 +135,7 @@ public class attributes_manager : MonoBehaviour {
 
 	private void _calculate_buff_to_mid() {
 		t_mid_attributes mid = new t_mid_attributes ();
-		foreach (buff_interface buff in buff_sort_with_guid.Values) {
+		foreach (IBuff buff in buff_sort_with_guid.Values) {
 			buff.calculate (mid);
 		}
 		this.mid = mid;
@@ -112,9 +143,7 @@ public class attributes_manager : MonoBehaviour {
 
 	private void _calculate_mid_to_attr() {
 		t_attributes attr = new t_attributes ();
-		foreach (t_attr_calc calc in attr_calc.Values) {
-			calc (this.mid, attr);
-		}
+		OnAttrRecalculate (this.mid, attr);
 		this.attr = attr;
 	}
 
@@ -138,20 +167,18 @@ public class attributes_manager : MonoBehaviour {
 	}
 */
 
-	public buff_interface add_buff(buff_interface bi) {
-		bi.am = this;
-
-		buff_sort_with_guid.Add (bi.guid, bi);
+	public IBuff add_buff(IBuff bi) {
+		buff_sort_with_guid.Add (bi.Guid, bi);
 		//buff_sort_with_priority.Add (bi);
 		//buff_sort_with_priority.Sort ((buff_interface x, buff_interface y) => x.priority.CompareTo(y.priority));
 		changed = true;
 		return bi;
 	}
 
-	public bool remove_buff(buff_interface bi) {
-		if (controllers.ContainsKey(bi.guid)) {
+	public bool remove_buff(IBuff bi) {
+		if (controllers.ContainsKey(bi.Guid)) {
 //			buff_sort_with_priority.Remove (bi);
-			buff_sort_with_guid.Remove (bi.guid);
+			buff_sort_with_guid.Remove (bi.Guid);
 			changed = true;
 			return true;
 		}
@@ -179,24 +206,14 @@ public class attributes_manager : MonoBehaviour {
 
 	//-------------------------attr_calc----------------------------
 
-	public System.Guid add_attr_calc(t_attr_calc ac, string name) {
-		System.Guid id = System.Guid.NewGuid ();
-
-		attr_calc.Add (id, ac);
-		attr_calc_name.Add (id, name);
-
+	public void add_attr_calc(t_attr_calc ac) {
+		OnAttrRecalculate += ac;
 		re_calculate ();
-		return id;
 	}
 
-	public bool remove_attr_calc(System.Guid to_remove){
-		if (attr_calc.ContainsKey(to_remove)) {
-			attr_calc.Remove (to_remove);
-			attr_calc_name.Remove (to_remove);
-			return true;
-		}
-		changed = true;
-		return false;
+	public void remove_attr_calc(t_attr_calc ac){
+		OnAttrRecalculate -= ac;
+		re_calculate ();
 	}
 		
 	//-----------------------etc---------------------------
@@ -214,7 +231,7 @@ public class attributes_manager : MonoBehaviour {
 		changed = true;
 	}
 
-	public void attr_calc_changed_fron(string name) {
+	public void attr_calc_changed_from(string name) {
 		changed = true;
 		Debug.Log (name);
 	}

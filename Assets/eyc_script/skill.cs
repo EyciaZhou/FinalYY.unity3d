@@ -52,7 +52,7 @@ public class skill : MonoBehaviour, controller_interface {
 			attr.small_fireball_cost = mid.small_fireball_level * 5 + 30;
 			attr.small_fireball_coldtime = 1.0f / (mid.small_fireball_level+1);
 			attr.small_fireball_hurt = 10 * mid.small_fireball_level + 0.1f * mid.intelligence;
-		}, "small_fireball");
+		});
 	}
 
 	void Update() {

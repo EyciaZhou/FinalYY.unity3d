@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public interface buff_interface {
+public interface IBuff {
 	void calculate(attributes_manager.t_mid_attributes mid);
-	attributes_manager am { set; }
-	System.Guid guid { get; }
+	System.Guid Guid { get; }
 }

@@ -36,7 +36,7 @@ public class fire_ring_view : MonoBehaviour {
 		module = com.p.fr;
 		p.am.add_attr_calc ((mid, attr)=>{
 			attr.duration_hatch_fireball_in_ring = 10;
-		},"duration_hatch_fireball_in_ring");
+		});
 
 		ring = new GameObject ("ring");
 

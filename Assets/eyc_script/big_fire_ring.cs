@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class big_fire_ring : MonoBehaviour {
 	SphereCollider sc;
-
+	float lifeTime = 20f;
 	float hurt = 10f;
 
 	HashSet<System.Guid> hited = new HashSet<System.Guid> ();
@@ -30,7 +30,7 @@ public class big_fire_ring : MonoBehaviour {
 
 		float start_time = Time.time;
 
-		while (Time.time <= start_time + 20) {
+		while (Time.time <= start_time + lifeTime) {
 			transform.localScale = Vector3.one * speed * (Time.time - start_time);
 			yield return null;
 		}

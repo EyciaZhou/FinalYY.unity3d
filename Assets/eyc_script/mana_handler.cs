@@ -64,11 +64,12 @@ public class mana_handler : MonoBehaviour, controller_interface
 
 	public bool cost (int point)
 	{
+		point = (int)((point - com.p.am.attr.mp_cost_minus) * (100 - com.p.am.attr.mp_cost_percentage_minus) / 100.0);
 		if (point < 0) {
-			return false;
+			point = 0;
 		}
 		
-		if (point >= this.point) {
+		if (point > this.point) {
 			foreach (t_mana_out_callback cb in mana_out_callbacks) {
 				cb ();
 			}

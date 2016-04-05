@@ -43,18 +43,21 @@ public class player : MonoBehaviour {
 		exp.init ();
 
 		am.add_attr_calc ((mid, attr) => { //TODO: 
-			attr.max_hp = mid.strength * 20;
+			attr.max_hp = mid.strength * 20 + mid.max_hp_addtion;
 			attr.recovery_per_second = mid.strength * 0.1f;
 
-			attr.max_mp = mid.intelligence * 20;
+			attr.max_mp = mid.intelligence * 20 + mid.max_mp_addition;
 			attr.recovery_mana_per_second = mid.intelligence * 1f;
 
-			attr.speed = (mid.speed_base + mid.speed_addition) * mid.speed_mutiply;
+			attr.speed = (mid.speed_base + mid.speed_addition) * mid.speed_mutiply / 100.0f;
 
 			attr.exp_extra = mid.exp_extra;
 			attr.exp_mutiply = mid.exp_mutiply;
 			attr.coin_raidus = mid.coin_raidus;
-		}, "hp&mp&speed");
+
+			attr.mp_cost_minus = mid.mp_cost_minus;
+			attr.mp_cost_percentage_minus = mid.mp_cost_percentage_minus;
+		});
 	}
 	
 	// Update is called once per frame
