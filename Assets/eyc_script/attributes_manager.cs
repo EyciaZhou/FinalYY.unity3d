@@ -116,7 +116,7 @@ public class attributes_manager : MonoBehaviour {
 		}
 	}
 
-	private t_mid_attributes mid;
+	private t_mid_attributes mid = new t_mid_attributes();
 	public event t_attr_calc OnAttrRecalculate;
 
 	//private Dictionary<System.Guid, string> attr_calc_name = new Dictionary<System.Guid, string>();
@@ -143,7 +143,9 @@ public class attributes_manager : MonoBehaviour {
 
 	private void _calculate_mid_to_attr() {
 		t_attributes attr = new t_attributes ();
-		OnAttrRecalculate (this.mid, attr);
+		if (OnAttrRecalculate != null) {
+			OnAttrRecalculate (this.mid, attr);
+		}
 		this.attr = attr;
 	}
 
@@ -168,6 +170,7 @@ public class attributes_manager : MonoBehaviour {
 */
 
 	public IBuff add_buff(IBuff bi) {
+
 		buff_sort_with_guid.Add (bi.Guid, bi);
 		//buff_sort_with_priority.Add (bi);
 		//buff_sort_with_priority.Sort ((buff_interface x, buff_interface y) => x.priority.CompareTo(y.priority));
@@ -176,7 +179,7 @@ public class attributes_manager : MonoBehaviour {
 	}
 
 	public bool remove_buff(IBuff bi) {
-		if (controllers.ContainsKey(bi.Guid)) {
+		if (buff_sort_with_guid.ContainsKey(bi.Guid)) {
 //			buff_sort_with_priority.Remove (bi);
 			buff_sort_with_guid.Remove (bi.Guid);
 			changed = true;

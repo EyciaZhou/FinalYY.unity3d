@@ -38,7 +38,7 @@ public class player : MonoBehaviour {
 		am.add_buff (exp);
 
 		ci.init ();
-		hp.init ();
+		hp.init (99999999);
 		mp.init ();
 		exp.init ();
 

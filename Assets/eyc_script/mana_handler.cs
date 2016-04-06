@@ -29,8 +29,12 @@ public class mana_handler : MonoBehaviour, controller_interface
 		int lst_mx = this.max_point;
 		this.max_point = am.attr.max_mp;
 
-		if (this.max_point - lst_mx > 0) {
-			recovery (this.max_point - lst_mx);
+//		if (this.max_point - lst_mx > 0) {
+//			recovery (this.max_point - lst_mx);
+//		}
+
+		if (point > this.max_point) {
+			point = this.max_point;
 		}
 
 		this.recovery_per_second = am.attr.recovery_mana_per_second;

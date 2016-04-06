@@ -42,7 +42,7 @@ public class bars : MonoBehaviour, view_interface {
 
 		bar_top_center_transfrom = GameObject.Find ("bar_top_center").GetComponent<RectTransform> ();
 
-		bag_transform = GameObject.Find ("bag").GetComponent<RectTransform> ();
+		bag_transform = GameObject.Find ("bag_button").GetComponent<RectTransform> ();
 
 		debug_info = GameObject.Find ("debug").GetComponent<Text> ();
 

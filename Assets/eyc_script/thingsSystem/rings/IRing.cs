@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public interface IRing  {
-	System.Guid Guid { get; }
+public interface IRing : IThing {
+	//System.Guid Guid { get; }
 	IBuff Buff { get; }
-	UISprite Sprite { get; }
+	//GameObject gameObject { get; }
 	RingUtils.Color Rare { get; }
-	string Name { get; }
-	string Description { get; }
+
+	void Unuse();
+	//string Name { get; }
+	//string Description { get; }
 }

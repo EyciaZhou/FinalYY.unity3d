@@ -3,7 +3,7 @@ using System.Collections;
 
 public class exp_handler_player : exp_handler, IBuff {
 	//public attributes_manager am { get; set; }
-	public System.Guid guid { get; private set; }
+	public System.Guid Guid { get; private set; }
 	public delegate void ExpValueChangeAction ();
 	public event ExpValueChangeAction OnExpValueChange;
 
@@ -20,7 +20,7 @@ public class exp_handler_player : exp_handler, IBuff {
 	}
 
 	public exp_handler_player() : base() {
-		this.guid = System.Guid.NewGuid ();
+		this.Guid = System.Guid.NewGuid ();
 		OnLvUp += (() => {
 			com.p.am.buff_changed_from("ehib");
 		});

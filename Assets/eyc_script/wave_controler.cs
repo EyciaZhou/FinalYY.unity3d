@@ -20,7 +20,6 @@ public class wave_controler : MonoBehaviour
 	void Start() {
 		wave = 0;
 		for (int i = 0; i < 5; i++) {
-			Debug.Log (i);
 			monster_looks.Add (new monster_look ((GameObject)Resources.Load (configs [i, 0]), configs [i, 1], configs [i, 2], configs [i, 3], configs [i,4]));
 		}
 	}

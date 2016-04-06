@@ -33,9 +33,8 @@ public class monster : MonoBehaviour {
 		m.hurt_cd = hurt_cd;
 		m.coin_min = coin_min;
 		m.coin_max = coin_max;
-		m.hp.init ();
+		m.hp.init (hp);
 		m.hp.add_dead_callback (m.dead);
-		m.hp.max_point = hp;
 		m.hurt = hurt;
 		m.exp = exp;
 

@@ -50,14 +50,14 @@ public class BuffUtils
 			field_info.SetValue (mid, result);
 		}
 
-		public System.Guid guid {
+		public System.Guid Guid {
 			get;
 			private set;
 		}
 
 		public OneAttrBuff_float (string field_name, float val)
 		{
-			guid = System.Guid.NewGuid ();
+			Guid = System.Guid.NewGuid ();
 			this.field_name = field_name;
 			this.val = val;
 		}
@@ -80,14 +80,14 @@ public class BuffUtils
 			field_info.SetValue (mid, result);
 		}
 
-		public System.Guid guid {
+		public System.Guid Guid {
 			get;
 			private set;
 		}
 
 		public OneAttrBuff_int (string field_name, int val)
 		{
-			guid = System.Guid.NewGuid ();
+			Guid = System.Guid.NewGuid ();
 			this.field_name = field_name;
 			this.val = val;
 		}
@@ -105,12 +105,12 @@ public class BuffUtils
 			}
 		}
 
-		public System.Guid guid { get; private set;}
+		public System.Guid Guid { get; private set;}
 
 		#endregion
 
 		public HeapAttrBuff() {
-			guid = System.Guid.NewGuid();
+			Guid = System.Guid.NewGuid();
 		}
 
 		public HeapAttrBuff Add(IBuff bi) {

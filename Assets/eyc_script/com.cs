@@ -11,23 +11,10 @@ public class com : MonoBehaviour
 	public	static	camera_and_input ci;
 	public	static	fire_manager fires;
 	public	static	coin_manager coins;
-
-
-	public	static	float	c_Jmped;
-	public	static	float	c_Spd = 10.0f;
-
-	
-	static	float	Spd = 30.0f;
-	static	float	SpdUpTime = 0.0f;
+	public	static	ThingsManager things;
 
 	public static void set_player(player pl) {
 		com.p = pl;
-	}
-
-	public static void reborn ()
-	{
-		p.hp.reborn ();
-		p.mp.reborn ();
 	}
 
 	void Start ()
@@ -36,22 +23,7 @@ public class com : MonoBehaviour
 		ts = gameObject.AddComponent<hourglass_manager> ();
 		fires = gameObject.AddComponent<fire_manager> ();
 		coins = gameObject.AddComponent<coin_manager> ();
-	}
-
-	public static void API_GainExp (int ex)
-	{
-		p.exp.gain_exp (ex);
-	}
-
-	public static void API_Drop_Coin (Vector3 pos, int coin)
-	{
-
-	}
-
-	public static void API_Hurt (int hurt)
-	{
-		//cal arm
-		p.hp.hurt (hurt);
+		things = gameObject.AddComponent<ThingsManager> ();
 	}
 
 	void Update ()
