@@ -20,6 +20,7 @@ public class RingDefault : IRing {
 
 
 	#region IRing implementation
+	public Color color { get; private set; }
 	public Guid Guid { get; private set; }
 	public IBuff Buff { get; private set; }
 	public GameObject gameObject { get; private set; }
@@ -28,12 +29,13 @@ public class RingDefault : IRing {
 	public string Description { get; private set; }
 	#endregion
 
-	public RingDefault(IBuff buff, GameObject gameObject, RingUtils.Color rare, string name, string description) {
+	public RingDefault(IBuff buff, GameObject gameObject, RingUtils.Color rare, string name, string description, UnityEngine.Color color) {
 		this.Guid = System.Guid.NewGuid ();
 		this.gameObject = gameObject;
 		this.Rare = rare;
 		this.Name = name;
 		this.Description = description;
 		this.Buff = buff;
+		this.color = color;
 	}
 }

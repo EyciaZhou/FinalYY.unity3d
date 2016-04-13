@@ -20,7 +20,7 @@ public class SelectController : MonoBehaviour {
 	}
 
 	private void showInfo() {
-		com.things.ui.setInfo (thing.Name, thing.Description);
+		com.things.ui.setInfo (thing.Name, thing.Description, thing.color);
 	}
 
 	private void stepOneClick() {
@@ -44,11 +44,13 @@ public class SelectController : MonoBehaviour {
 	}
 
 	public void OnClick() {
-		showInfo ();
-		if (stepTwo) {
-			stepTwoClick ();
-		} else {
-			stepOneClick ();
+		if (enabled) {
+			showInfo ();
+			if (stepTwo) {
+				stepTwoClick ();
+			} else {
+				stepOneClick ();
+			}
 		}
 	}
 

@@ -26,9 +26,28 @@ public class RingUtils
 		}
 	}
 
+
+	private class confForEachColor {
+		public int Probability;
+		public float AttrMutiply;
+		public int LineCnt;
+		public string PrefabName;
+		public int MoneyWhenSale;
+		public UnityEngine.Color color;
+		public GameObject Prefab;
+
+		public confForEachColor(int Probability, float AttrMutiply, int LineCnt, string PrefabName, int MoneyWhenSale, UnityEngine.Color color, GameObject Prefab) {
+			this.Probability = Probability;
+			this.AttrMutiply = AttrMutiply;
+			this.LineCnt = LineCnt;
+			this.PrefabName = PrefabName;
+			this.MoneyWhenSale = MoneyWhenSale;
+			this.color = color;
+			this.Prefab = Prefab;
+		}
+	}
+
 	const int ColorCnt = 6;
-	private static int[] ProbabilityOfColor = new int[ColorCnt] { 5, 60, 30, 10, 5, 1 };
-	private static readonly int ProbabilityAddTo = 111;
 	private static readonly string prefabUILocation = "thing/ring/";
 
 	private static readonly confForRandomAttr[] AttrConfig = new confForRandomAttr[] {
@@ -42,23 +61,20 @@ public class RingUtils
 		new confForRandomAttr ("mp_cost_minus", 3, 4, "魔法消耗-{0}", "节能"),
 		new confForRandomAttr ("mp_cost_percentage_minus", 10, 15, "魔法消耗-{0}%", "减排"),
 	};
-	private static readonly float[] AttrMutiplyOfColor = new float[ColorCnt] { 0, 1, 1.5f, 2f, 3f, 5f };
-	private static readonly int[] LineCntOfColor = new int[ColorCnt] { 0, 1, 2, 3, 3, 4 }; //change value should change suffix array either
+
+	private static confForEachColor[] ColorConf = new confForEachColor[ColorCnt] {
+		new confForEachColor(5, 0, 0, "Expensive", 1000, UnityEngine.Color.yellow, null),
+		new confForEachColor(60, 1, 1, "Common", 10, UnityEngine.Color.white, null),
+		new confForEachColor(30, 1.5f, 2, "Rare", 50, UnityEngine.Color.green, null),
+		new confForEachColor(10, 2, 3, "Epic", 100, UnityEngine.Color.blue, null),
+		new confForEachColor(5, 3, 3, "Legend", 500, UnityEngine.Color.cyan, null),
+		new confForEachColor(1, 5, 4, "Unique", 1000, UnityEngine.Color.red, null),
+	};
+
+	private static int ProbabilityAddTo = 111;
+
 	private static readonly string[] SuffixOfEachWordInName = new string[4] {"的", "而又", "之", ""};
 
-	private static readonly string[] PrefabNameOfColor = new string[ColorCnt] {"Expensive", "Common", "Rare", "Epic", "Legend", "Unique"};
-	private static GameObject[] PrefabOfColor;
-
-	public static readonly int[] MoneyWhenSaleOfColor = new int[ColorCnt] { 1000, 10, 50, 100, 500, 1000 };
-	public static Dictionary<RingUtils.Color, UnityEngine.Color> RGBToColor = 
-		new Dictionary<RingUtils.Color, UnityEngine.Color> () {
-			{ RingUtils.Color.Expensive, UnityEngine.Color.yellow },
-			{ RingUtils.Color.Common, UnityEngine.Color.white },
-			{ RingUtils.Color.Rare, UnityEngine.Color.green },
-			{ RingUtils.Color.Epic, UnityEngine.Color.blue },
-			{ RingUtils.Color.Legend, UnityEngine.Color.cyan },
-			{ RingUtils.Color.Unique, UnityEngine.Color.red }
-		};
 
 	public enum Color
 	{
@@ -78,17 +94,16 @@ public class RingUtils
 
 	public static void load ()
 	{
-		PrefabOfColor = new GameObject[ColorCnt];
 		for (int i = 0; i < ColorCnt; i++) {
-			PrefabOfColor [i] = Resources.Load<GameObject> (prefabUILocation + PrefabNameOfColor [i]);
+			ColorConf[i].Prefab = Resources.Load<GameObject> (prefabUILocation + ColorConf [i].PrefabName);
 		}
 	}
 
 	private static void randomAttrsAndNameAndDescription (Color co, out BuffUtils.HeapAttrBuff buff, 
 	                                                     out string name, out string description)
 	{
-
-		var lineCnt = LineCntOfColor [(int)(co)];
+		var co_i = (int)(co);
+		var lineCnt = ColorConf [co_i].LineCnt;
 
 		var choose = new bool[AttrConfig.Length];
 
@@ -111,13 +126,13 @@ public class RingUtils
 
 				var fieldInfo = typeof(attributes_manager.t_mid_attributes).GetField (AttrConfig [i].FieldName);
 				if (fieldInfo.FieldType == typeof(int)) {
-					var val = (int)(Random.Range (AttrConfig [i].Least, AttrConfig [i].Most) * AttrMutiplyOfColor [(int)(co)]);
+					var val = (int)(Random.Range (AttrConfig [i].Least, AttrConfig [i].Most) * ColorConf [co_i].AttrMutiply);
 					desc += string.Format (AttrConfig [i].Format, val) + "\n";
 					b.Add (new BuffUtils.OneAttrBuff_int (AttrConfig [i].FieldName, val));
 				}
 
 				if (fieldInfo.FieldType == typeof(float)) {
-					var val = Random.Range (AttrConfig [i].Least, AttrConfig [i].Most) * AttrMutiplyOfColor [(int)(co)];
+					var val = Random.Range (AttrConfig [i].Least, AttrConfig [i].Most) * ColorConf [co_i].AttrMutiply;
 					desc += string.Format (AttrConfig [i].Format, val) + "\n";
 					b.Add (new BuffUtils.OneAttrBuff_float (AttrConfig [i].FieldName, val));
 				}
@@ -132,29 +147,28 @@ public class RingUtils
 		buff = b;
 		name = prefix;
 		description = desc;
-
-		Debug.Log (desc);
 	}
 
 	public static RingDefault RandomOneRing ()
 	{
 		float r = Random.value * ProbabilityAddTo;
 		int co = 0;
-		while (co < ColorCnt && r > ProbabilityOfColor [co]) {
-			r -= ProbabilityOfColor [co];
+		while (co < ColorCnt && r > ColorConf[co].Probability) {
+			r -= ColorConf[co].Probability;
 			co++;
 		}
 		if (co == ColorCnt)
 			co = ColorCnt - 1;
 
 		Color rare = (Color)(co);
-		GameObject prefabUI = PrefabOfColor [co];
+		GameObject prefabUI = ColorConf [co].Prefab;
+		UnityEngine.Color color = ColorConf [co].color;
 		BuffUtils.HeapAttrBuff buff;
 		string name, description;
 
 		randomAttrsAndNameAndDescription (rare, out buff, out name, out description);
 
-		return new RingDefault (buff, prefabUI, rare, name, description);
+		return new RingDefault (buff, prefabUI, rare, name, description, color);
 	}
 
 

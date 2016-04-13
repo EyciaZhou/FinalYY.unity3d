@@ -6,6 +6,7 @@ public interface IThing  {
 	string Name { get; }
 	string Description { get; }
 	GameObject gameObject { get; }
+	UnityEngine.Color color { get; }
 
 	void Use();
 }

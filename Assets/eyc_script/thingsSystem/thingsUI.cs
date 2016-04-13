@@ -55,12 +55,15 @@ public class ThingsUI : MonoBehaviour {
 		}
 			
 
-		item_scroll_view.transform.position = Vector3.zero;
+		SpringPanel sp = item_scroll_view.GetComponent<SpringPanel> ();
+		sp.target = Vector3.right * sp.target.x;
+		item_scroll_view.GetComponent<SpringPanel> ().enabled = true;
 	}
 
-	public void setInfo(string name, string desp) {
+	public void setInfo(string name, string desp, UnityEngine.Color color) {
 		bag_item_name.text = name;
 		bag_item_info.text = desp;
+		bag_item_name.color = color;
 	}
 
 	void Awake() {

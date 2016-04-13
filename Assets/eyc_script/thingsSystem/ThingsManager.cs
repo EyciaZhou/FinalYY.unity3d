@@ -11,16 +11,34 @@ public class ThingsManager : MonoBehaviour {
 
 	void Start() {
 		RingUtils.load ();
+		pointsUtils.load ();
 
 		ui = gameObject.AddComponent<ThingsUI> ();
 
 		for (int i = 0; i < 5; i++) {
 			GetThing (RingUtils.RandomOneRing ());
 		}
+
+		for (int i = 0; i < 5; i++) {
+			GetThing (pointsUtils.RandomOneRing ());
+		}
 	}
 
 	public void GetThing(IThing thing) {
 		addThingToBag (thing);
+	}
+
+	public void UsePoint(ThingPoint point) {
+		if (point.typ == pointsUtils.TypeOfPoint.HP) {
+			com.p.hp.recovery(point.point);
+		} else if (point.typ == pointsUtils.TypeOfPoint.MP) {
+			com.p.mp.recovery(point.point);
+		} else if (point.typ == pointsUtils.TypeOfPoint.EXP) {
+			com.p.exp.gain_exp(point.point);
+		}
+		if (thingsInBag.ContainsKey(point.Guid)) {
+			removeThingInBag (point);
+		}
 	}
 
 	public bool UseRing(IRing ring) {
