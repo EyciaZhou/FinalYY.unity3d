@@ -47,8 +47,8 @@ public class wave_controler : MonoBehaviour
 			monsters.RemoveAll (item => item.GetComponent<monster> ().status == monster.monster_status.dead);
 		}
 		if (wave % 2 == 0) {
-			for (int i = 0; i < 100; i++) {
-				monsters.Add (GenMonster (monster_looks[0], 0.5f, 1, 10, 40, 30, 20, 30, new Vector3(f.RandomFloat(0, 200), 0, f.RandomFloat(0, 200))));
+			for (int i = 0; i < 20; i++) {
+				monsters.Add (GenMonster (monster_looks[0], 0.5f, 1, 10, 40, 30, 20, 10, new Vector3(f.RandomFloat(0, 200), 0, f.RandomFloat(0, 200))));
 			}
 			wave++;
 		}

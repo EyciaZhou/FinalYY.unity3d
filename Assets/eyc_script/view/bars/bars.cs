@@ -22,8 +22,6 @@ public class bars : MonoBehaviour, view_interface {
 
 	RectTransform bar_top_center_transfrom;
 
-	RectTransform bag_transform;
-
 	private bool modified = false;
 
 	// Use this for initialization
@@ -41,8 +39,6 @@ public class bars : MonoBehaviour, view_interface {
 		bar_exp_transform = GameObject.Find ("bar_exp").GetComponent<RectTransform> ();
 
 		bar_top_center_transfrom = GameObject.Find ("bar_top_center").GetComponent<RectTransform> ();
-
-		bag_transform = GameObject.Find ("bag_button").GetComponent<RectTransform> ();
 
 		debug_info = GameObject.Find ("debug").GetComponent<Text> ();
 
@@ -86,9 +82,6 @@ public class bars : MonoBehaviour, view_interface {
 
 			int hp_mx = com.p.hp.max_point;
 			int hp_cur = com.p.hp.point;
-
-			bag_transform.anchoredPosition = new Vector2 (BAR_HEIGHT * 2, 0);
-			bag_transform.sizeDelta = new Vector2 (BAR_HEIGHT * 3, BAR_HEIGHT * 3);
 
 			bar_top_center_transfrom.anchoredPosition = new Vector2 (0, -BAR_HEIGHT);
 			bar_top_center_transfrom.sizeDelta = new Vector2 (-BAR_HEIGHT * 1.5f, 0);

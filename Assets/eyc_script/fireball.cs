@@ -91,8 +91,9 @@ public class fireball : MonoBehaviour {
 		});
 	}
 
-	void destory() {
+	public void destory() {
 		status = fire_status.invaild;
+		Instantiate (boom, transform.position, transform.rotation);
 		Destroy (gameObject);
 	}
 
@@ -129,7 +130,6 @@ public class fireball : MonoBehaviour {
 			if (hp != null) {
 				hp.hurt ((int)(Hurt));
 			}
-			Instantiate (boom, transform.position, transform.rotation);
 			destory ();
 		}
 	}

@@ -28,7 +28,12 @@ public class SelectController : MonoBehaviour {
 		UIButton btn = gameObject.GetComponent<UIButton>();
 		btn.normalSprite = btn.pressedSprite;
 
-		Invoke ("setNormal", 2);
+		StartCoroutine (coSetNormal ());
+	}
+
+	private IEnumerator coSetNormal() {
+		yield return CoroutineUtil.WaitForRealSeconds (2);
+		setNormal ();
 	}
 
 	private void setNormal() {

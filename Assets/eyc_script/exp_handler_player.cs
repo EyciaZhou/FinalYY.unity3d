@@ -13,8 +13,8 @@ public class exp_handler_player : exp_handler, IBuff {
 		mid.intelligence += 10 * lv;
 		mid.agility += 10 * lv;
 		mid.strength += 10 * lv;
-		mid.speed_base += 5 + lv / 2;
-		mid.speed_mutiply += (int)((1 + 0.5f / lv) * 100);
+		mid.speed_base += 5 + lv / 5;
+		mid.speed_mutiply += (int)((1 + 0.5f / lv / lv) * 100);
 		mid.exp_mutiply += 100;
 		mid.coin_raidus += 1;
 	}

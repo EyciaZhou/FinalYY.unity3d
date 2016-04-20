@@ -15,7 +15,7 @@ public class flash_thunder : MonoBehaviour {
 				lig.intensity = large * 36 * delta;
 				yield return null;
 			}
-			lig.intensity = 0;
+			lig.intensity = 0.4f;
 
 			float wait_duration = f.RandomFloat (0.1f, 10.0f);
 

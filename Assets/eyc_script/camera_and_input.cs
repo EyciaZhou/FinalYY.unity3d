@@ -45,7 +45,7 @@ public class camera_and_input : MonoBehaviour
 	//Mode 0
 	float cam_Max = 30.0f;
 	//摄像机与人最远距离，为长度值，供滚动用
-	float cam_Min = 10.0f;
+	float cam_Min = 20.0f;
 	//摄像机与人最近距离，为长度值，供滚动用
 	float cam_Up = 1.0f;
 	//摄像机与【瞄准位置】的高度差，以人物中心点为0，详见图

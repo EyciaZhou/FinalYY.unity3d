@@ -26,7 +26,13 @@ public class skill : MonoBehaviour, controller_interface {
 
 	public void big_fire_ring() {
 		//judge mana
-		Instantiate (big_fire_ring_go, com.p.transform.position, Quaternion.Euler(Vector3.zero));
+
+		fireball fb = com.p.fr.Remove ();
+
+		if (fb != null) {
+			fb.destory ();
+			Instantiate (big_fire_ring_go, com.p.transform.position, Quaternion.Euler (Vector3.zero));
+		}
 	}
 
 	#region controller_interface implementation

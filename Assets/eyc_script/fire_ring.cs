@@ -29,6 +29,16 @@ public class fire_ring : MonoBehaviour {
 		p = com.p;
 		view = com.p.fr_view;
 	}
+
+	public fireball Remove() {
+		if (fireball_in_ring.Count == 0 || (status == ring_status.hatch && fireball_in_ring.Count == 1)) {
+			return null;
+		}
+		fireball fb = fireball_in_ring.First.Value;
+		fireball_in_ring.RemoveFirst ();
+
+		return fb;
+	}
 	
 	// Update is called once per frame
 	void Update () {
