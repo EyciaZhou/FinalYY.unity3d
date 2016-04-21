@@ -51,15 +51,15 @@ public class RingUtils
 	private static readonly string prefabUILocation = "thing/ring/";
 
 	private static readonly confForRandomAttr[] AttrConfig = new confForRandomAttr[] {
-		new confForRandomAttr ("strength", 3, 6, "力量+{0}", "强壮"),
-		new confForRandomAttr ("agility", 3, 6, "敏捷+{0}", "矫健"),
-		new confForRandomAttr ("intelligence", 3, 6, "智力+{0}", "聪慧"),
-		new confForRandomAttr ("speed_addition", 1, 3, "移动速度+{0}", "迅捷"),
-		new confForRandomAttr ("exp_mutiply", 40, 50, "经验获取+{0}%", "灵光"),
-		new confForRandomAttr ("max_hp_addtion", 100, 150, "生命值+{0}", "红色"),
-		new confForRandomAttr ("max_mp_addition", 100, 150, "魔法值+{0}", "蓝色"),
-		new confForRandomAttr ("mp_cost_minus", 3, 4, "魔法消耗-{0}", "节能"),
-		new confForRandomAttr ("mp_cost_percentage_minus", 10, 15, "魔法消耗-{0}%", "减排"),
+		new confForRandomAttr ("Strength", 3, 6, "力量+{0}", "强壮"),
+		new confForRandomAttr ("Agility", 3, 6, "敏捷+{0}", "矫健"),
+		new confForRandomAttr ("Intelligence", 3, 6, "智力+{0}", "聪慧"),
+		new confForRandomAttr ("SpeedAddition", 1, 3, "移动速度+{0}", "迅捷"),
+		new confForRandomAttr ("ExpMutiply", 40, 50, "经验获取+{0}%", "灵光"),
+		new confForRandomAttr ("HpAddtion", 100, 150, "生命值+{0}", "红色"),
+		new confForRandomAttr ("MpAddition", 100, 150, "魔法值+{0}", "蓝色"),
+		new confForRandomAttr ("MpCostMinus", 3, 4, "魔法消耗-{0}", "节能"),
+		new confForRandomAttr ("MpCostPercentageMinus", 10, 15, "魔法消耗-{0}%", "减排"),
 	};
 
 	private static confForEachColor[] ColorConf = new confForEachColor[ColorCnt] {
@@ -124,7 +124,7 @@ public class RingUtils
 			if (choose [i]) {
 				prefix += AttrConfig [i].Prefix + SuffixOfEachWordInName[lineCnt-p-1];
 
-				var fieldInfo = typeof(attributes_manager.t_mid_attributes).GetField (AttrConfig [i].FieldName);
+				var fieldInfo = typeof(AttributesManager.MidAttributes).GetField (AttrConfig [i].FieldName);
 				if (fieldInfo.FieldType == typeof(int)) {
 					var val = (int)(Random.Range (AttrConfig [i].Least, AttrConfig [i].Most) * ColorConf [co_i].AttrMutiply);
 					desc += string.Format (AttrConfig [i].Format, val) + "\n";

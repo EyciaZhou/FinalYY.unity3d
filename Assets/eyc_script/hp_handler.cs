@@ -19,7 +19,7 @@ public class hp_handler : MonoBehaviour, controller_interface
 
 	view_interface view;
 
-	public attributes_manager am{ get; set; }
+	public AttributesManager am { get; set; }
 	public System.Guid guid { get; private set; }
 
 	public hp_handler() {
@@ -27,22 +27,15 @@ public class hp_handler : MonoBehaviour, controller_interface
 	}
 
 	public void update_controller() {
-//		int lst_mx = this.max_point;
-		this.max_point = am.attr.max_hp;
-
-//		if (this.max_point - lst_mx > 0) {
-//			recovery (this.max_point - lst_mx);
-//		}
+		this.max_point = am.Attr.HpUpperLimit;
 
 		if (point > this.max_point) {
 			point = this.max_point;
 		}
 
-		this.recovery_per_second = am.attr.recovery_per_second;
+		this.recovery_per_second = am.Attr.HpRecovery;
 
 		modified = true;
-		Debug.Log (this.point);
-		Debug.Log ("hp update_controller");
 	}
 
 	public float getRate() {
@@ -140,9 +133,9 @@ public class hp_handler : MonoBehaviour, controller_interface
 	}
 		
 	// Use this for initialization
-	public void init (int hp)
+	public void init (int point)
 	{
-		this.point = this.max_point = hp;
+		this.point = this.max_point = point;
 		InvokeRepeating ("recovery_deamon", 0, 1);
 	}
 

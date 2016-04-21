@@ -119,7 +119,7 @@ public class camera_and_input : MonoBehaviour
 			} else {
 				GetComponent<Animator>().SetBool("run", true);
 				target_ea = new Vector3 (0, 90 - f.vector2_to_angle_deg (move.joystickAxis), 0);
-				gameObject.GetComponent<NavMeshAgent> ().Move(transform.forward * com.p.am.attr.speed * Time.deltaTime);
+				gameObject.GetComponent<NavMeshAgent> ().Move(transform.forward * com.p.am.Attr.MoveSpeed * Time.deltaTime);
 			}
 		}
 

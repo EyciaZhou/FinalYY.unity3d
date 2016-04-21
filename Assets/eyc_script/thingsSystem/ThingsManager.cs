@@ -57,7 +57,7 @@ public class ThingsManager : MonoBehaviour {
 		}
 
 		removeThingInBag (ring);
-		com.p.am.add_buff (ring.Buff);
+		com.p.am.AddBuff (ring.Buff);
 		return true;
 	}
 
@@ -74,7 +74,7 @@ public class ThingsManager : MonoBehaviour {
 
 		addThingToBag (ring);
 
-		com.p.am.remove_buff (ring.Buff);
+		com.p.am.RemoveBuff (ring.Buff);
 		return true;
 	}
 

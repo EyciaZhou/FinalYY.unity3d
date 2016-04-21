@@ -44,6 +44,6 @@ public class coin_manager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		coin_collector.radius = com.p.am.attr.coin_raidus;
+		coin_collector.radius = com.p.am.Calc_CoinRaidus();
 	}
 }

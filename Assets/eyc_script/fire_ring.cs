@@ -52,7 +52,7 @@ public class fire_ring : MonoBehaviour {
 				fireball_in_ring.AddLast(hatch);
 				view.update_postion ();
 
-				dot = com.ts.add_dot (p.am.attr.duration_hatch_fireball_in_ring,
+				dot = com.ts.add_dot (p.am.Attr.FireRingHatchDuration,
 					0.1f, 
 					() => {
 						hatch.scale = dot.reach_total / dot.target;

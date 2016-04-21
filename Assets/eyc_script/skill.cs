@@ -1,24 +1,30 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class skill : MonoBehaviour, controller_interface {
+public class skill : MonoBehaviour {
 	public GameObject bar_go;
 
 	private bool small_fireball_colddown = true;
 
 	private GameObject big_fire_ring_go;
 
+	private AttributesManager am;
+
 	public void small_fireball_from_bar(Quaternion rotation) {
 		if (small_fireball_colddown) {
-			if (com.p.mp.cost (am.attr.small_fireball_cost)) {
+			if (com.p.mp.cost (am.Attr.SmallFireball_Cost)) {
 				com.p.GetComponent<Animator> ().SetTrigger ("fire");
 				com.ts.add_hourglass (
-					am.attr.small_fireball_coldtime, 
+					am.Attr.SmallFireball_Cooldown, 
 					() => {
 						small_fireball_colddown = true;
 					}
 				);
-				com.fires.new_fireball_default (bar_go.transform, rotation, am.attr.small_fireball_hurt);
+				com.fires.new_fireball_default (
+					bar_go.transform, 
+					rotation, 
+					am.Attr.SmallFireball_Hurt
+				);
 				small_fireball_colddown = false;
 			}
 		}
@@ -35,30 +41,15 @@ public class skill : MonoBehaviour, controller_interface {
 		}
 	}
 
-	#region controller_interface implementation
-	public void update_controller () {}
-	public void bind_view (view_interface v) {}
-	public attributes_manager am { get ; set ; }
-	public System.Guid guid { get ; private set; }
-	#endregion
-
 	public skill() {
-		guid = System.Guid.NewGuid ();
 	}
 
 	void Start() {
 		am = com.p.am;
-		am.bind_controller (this);
 
 		bar_go = GameObject.Find ("bar_local");
 
 		big_fire_ring_go = Resources.Load<GameObject> ("big_fire_ring/big_fire_ring");
-
-		am.add_attr_calc((mid, attr) => {
-			attr.small_fireball_cost = mid.small_fireball_level * 5 + 30;
-			attr.small_fireball_coldtime = 1.0f / (mid.small_fireball_level+1);
-			attr.small_fireball_hurt = 10 * mid.small_fireball_level + 0.1f * mid.intelligence;
-		});
 	}
 
 	void Update() {

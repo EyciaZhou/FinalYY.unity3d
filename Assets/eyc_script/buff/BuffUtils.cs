@@ -38,9 +38,9 @@ public class BuffUtils
 		private float val;
 
 
-		public void calculate (attributes_manager.t_mid_attributes mid)
+		public void calculate (AttributesManager.MidAttributes mid)
 		{
-			var field_info = typeof(attributes_manager.t_mid_attributes).GetField (field_name);
+			var field_info = typeof(AttributesManager.MidAttributes).GetField (field_name);
 			if (field_info == null) {
 				Debug.Log ("not existed field in mid attributes: " + field_name);
 				return;
@@ -55,6 +55,8 @@ public class BuffUtils
 			private set;
 		}
 
+		public AttributesManager AM { get; set; }
+
 		public OneAttrBuff_float (string field_name, float val)
 		{
 			Guid = System.Guid.NewGuid ();
@@ -68,9 +70,9 @@ public class BuffUtils
 		private string field_name;
 		private int val;
 
-		public void calculate (attributes_manager.t_mid_attributes mid)
+		public void calculate (AttributesManager.MidAttributes mid)
 		{
-			var field_info = typeof(attributes_manager.t_mid_attributes).GetField (field_name);
+			var field_info = typeof(AttributesManager.MidAttributes).GetField (field_name);
 			if (field_info == null) {
 				Debug.Log ("not existed field in mid attributes: " + field_name);
 				return;
@@ -85,6 +87,8 @@ public class BuffUtils
 			private set;
 		}
 
+		public AttributesManager AM { get; set; }
+
 		public OneAttrBuff_int (string field_name, int val)
 		{
 			Guid = System.Guid.NewGuid ();
@@ -98,7 +102,7 @@ public class BuffUtils
 
 		#region buff_interface implementation
 
-		public void calculate (attributes_manager.t_mid_attributes mid)
+		public void calculate (AttributesManager.MidAttributes mid)
 		{
 			foreach (IBuff bi in heap) {
 				bi.calculate (mid);
@@ -108,6 +112,8 @@ public class BuffUtils
 		public System.Guid Guid { get; private set;}
 
 		#endregion
+
+		public AttributesManager AM { get; set; }
 
 		public HeapAttrBuff() {
 			Guid = System.Guid.NewGuid();

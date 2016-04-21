@@ -16,13 +16,13 @@ public class exp_handler : MonoBehaviour
 	private int level_pool;
 
 	public void LockLvUp() {
-		lock (LvUpWaitGroup) {
+		lock (this) {
 			LvUpWaitGroup++;
 		}
 	}
 
 	public void UnLockLvUp() {
-		lock (LvUpWaitGroup) {
+		lock (this) {
 			if (LvUpWaitGroup > 0) {
 				LvUpWaitGroup--;
 			} else {
@@ -33,20 +33,9 @@ public class exp_handler : MonoBehaviour
 
 	void Update()
 	{
-		if (!LvUpWaitGroup && level_pool > 0) {
-			_lvup ();
+		if (LvUpWaitGroup == 0 && level_pool > 0) {
+			something_process_when_lvup ();
 		}
-	}
-
-	public void clear ()
-	{
-		lv = 1;
-		current = 0;
-		limit = exp_calu (lv);
-	}
-
-	public exp_handler() {
-		clear ();
 	}
 
 	private long exp_calu(int lv) {
@@ -55,10 +44,12 @@ public class exp_handler : MonoBehaviour
 
 	public void init ()
 	{
-		clear ();
+		lv = 1;
+		current = 0;
+		limit = exp_calu (lv);
 	}
 
-	void _lvup ()
+	private void something_process_when_lvup ()
 	{
 		lv++;
 		limit = exp_calu (lv);
@@ -66,23 +57,23 @@ public class exp_handler : MonoBehaviour
 		OnLvUp ();
 	}
 
-	void lvUpPool() {
+	private void lvUpToPool() {
 		level_pool++;
 	}
 
-	public void lv_up (long lvs_to_up)
+	public void LvUp (int lvs_to_up)
 	{
 		for (int i = 0; i < lvs_to_up; i++) {
-			lvUpPool ();
+			lvUpToPool ();
 		}
 	}
 
-	public void gain_exp (int exp)
+	public void GainExp (int exp)
 	{
 		current += exp;
 		while (current >= limit) {
 			current -= limit;
-			lvUpPool ();
+			lvUpToPool ();
 		}
 	}
 }

@@ -2,6 +2,7 @@
 using System.Collections;
 
 public interface IBuff {
-	void calculate(attributes_manager.t_mid_attributes mid);
+	void calculate(AttributesManager.MidAttributes mid);
 	System.Guid Guid { get; }
+	AttributesManager AM { set; }
 }

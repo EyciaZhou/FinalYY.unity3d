@@ -18,7 +18,7 @@ public class mana_handler : MonoBehaviour, controller_interface
 
 	bool modified = false;
 
-	public attributes_manager am{ get; set; }
+	public AttributesManager am{ get; set; }
 	public System.Guid guid{ get; private set; }
 
 	public mana_handler() {
@@ -26,18 +26,13 @@ public class mana_handler : MonoBehaviour, controller_interface
 	}
 
 	public void update_controller() {
-		int lst_mx = this.max_point;
-		this.max_point = am.attr.max_mp;
-
-//		if (this.max_point - lst_mx > 0) {
-//			recovery (this.max_point - lst_mx);
-//		}
+		this.max_point = am.Attr.MpUpperLimit;
 
 		if (point > this.max_point) {
 			point = this.max_point;
 		}
 
-		this.recovery_per_second = am.attr.recovery_mana_per_second;
+		this.recovery_per_second = am.Attr.MpRecovery;
 
 		modified = true;
 	}
@@ -68,7 +63,7 @@ public class mana_handler : MonoBehaviour, controller_interface
 
 	public bool cost (int point)
 	{
-		point = (int)((point - com.p.am.attr.mp_cost_minus) * (100 - com.p.am.attr.mp_cost_percentage_minus) / 100.0);
+		point = com.p.am.Calc_ReallyMpCost (point);
 		if (point < 0) {
 			point = 0;
 		}
@@ -119,6 +114,7 @@ public class mana_handler : MonoBehaviour, controller_interface
 	// Use this for initialization
 	public void init ()
 	{
+		this.point = this.max_point = 0x7ffffff;
 		InvokeRepeating ("recovery_deamon", 0, 1);
 	}
 	
